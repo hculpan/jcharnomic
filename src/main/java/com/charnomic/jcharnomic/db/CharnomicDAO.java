@@ -35,6 +35,35 @@ public class CharnomicDAO {
         }
     }
 
+    public Player getPlayerById(Integer id) {
+        Player player = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select * from players where id = " + id.toString());
+                if (set.next()) {
+                    player = new Player();
+                    player.setId(set.getInt("id"));
+                    player.setLastname(set.getString("lastname"));
+                    player.setFirstname(set.getString("firstname"));
+                    player.setLevel(set.getInt("level"));
+                    player.setPoints(set.getInt("points"));
+                    player.setGold(set.getInt("gold"));
+                    player.setTurn(set.getBoolean("turn"));
+                    player.setOnLeave(set.getBoolean("onleave"));
+                    player.setJoined(set.getDate("joined"));
+                    player.setLeftGame(set.getDate("leftgame"));
+                    player.setMonitor(set.getBoolean("monitor"));
+                    player.setVetoes(set.getInt("vetoes"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return player;
+    }
+
     public List<Player> retrievePlayers() {
         List<Player> players = new ArrayList<>();
 
@@ -120,6 +149,32 @@ public class CharnomicDAO {
         }
 
         return proposals;
+    }
+
+    public List<Judgment> retrieveJudgments() {
+        List<Judgment> judgments = new ArrayList<>();
+
+        try (Connection conn =cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select * from judgments");
+                while (set.next()) {
+                    Judgment judgment = new Judgment();
+                    judgment.setId(set.getInt("id"));
+                    judgment.setRequest(set.getString("request"));
+                    judgment.setJudgment(set.getString("judgment"));
+                    judgment.setRequestedBy(getPlayerById(set.getInt("requestedby")));
+                    judgment.setRequestedDate(set.getDate("requesteddate"));
+                    judgment.setJudgedBy(getPlayerById(set.getInt("judgedby")));
+                    judgment.setJudgedDate(set.getDate("judgeddate"));
+                    judgment.setOverruled(set.getBoolean("overruled"));
+                    judgments.add(judgment);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return judgments;
     }
 
 }

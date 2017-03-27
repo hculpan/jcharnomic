@@ -1,9 +1,6 @@
 package com.charnomic.jcharnomic;
 
-import com.charnomic.jcharnomic.db.CharnomicDAO;
-import com.charnomic.jcharnomic.db.Player;
-import com.charnomic.jcharnomic.db.Proposal;
-import com.charnomic.jcharnomic.db.Rule;
+import com.charnomic.jcharnomic.db.*;
 import freemarker.ext.beans.HashAdapter;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -66,6 +63,17 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
                     params.put("proposals", proposals);
+                    template.process(params, response.getWriter());
+                    baseRequest.setHandled(true);
+                } catch (TemplateException e) {
+                    e.printStackTrace();
+                }
+            } else if (target.equals("/judgments")) {
+                try {
+                    Template template = configuration.getTemplate("judgments.html");
+                    Map<String, Object> params = new HashMap<>();
+                    List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
+                    params.put("judgments", judgments);
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {

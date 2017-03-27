@@ -10,6 +10,7 @@
 
             <#list proposals as proposal>
             <blockquote class="status-${proposal.status}">
+                <#if proposal?index == 0><hr/></#if>
                 <div class="rule">
                     <#if proposal.name??>
                         ${proposal.num} - ${proposal.name}<br>
@@ -19,8 +20,7 @@
                     </#if>
                 </div>
 
-                <hr>
-                <div class="footer-col-wrapper status-${proposal.status}">
+<!--                <div class="footer-col-wrapper status-${proposal.status}">
                     <div class="footer-col footer-col-1">
                         <ul class="contact-list">
                             <li>Proposed by: {{firstname}} {{lastname}} on {{formatStandardTime proposeddate}}</li>
@@ -40,8 +40,9 @@
                             <li>Abstained: 1 (Steve)</li>
                         </ul>
                     </div>
-                </div>
-                <hr>
+                </div> -->
+                <div class=""center-text"><a href="">Details</a></div>
+                <hr/>
             </blockquote>
             </#list>
         </div>

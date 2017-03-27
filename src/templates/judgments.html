@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<#include "head.html"/>
+
+<#include "header.html"/>
+
+<body>
+    <div class="wrapper">
+        <h2 class="center-text">Judgments</h2>
+
+        <blockquote class="status-passed">
+        <#list judgments as judgment>
+            <#if judgment?index == 0><hr/></#if>
+            <h4>Invocation of Judgment</h4>
+            ${judgment.request}
+            <h4>Judgment</h4>
+            ${judgment.judgment}
+            <h4>Called by: ${judgment.requestedBy.firstname} ${judgment.requestedBy.lastname} on
+                ${judgment.requestedDate?string.medium_short}</h4>
+            <h4>Judged by: ${judgment.judgedBy.firstname} ${judgment.judgedBy.lastname} on
+                ${judgment.judgedDate?string.medium_short}</h4>
+            <h4>Overruled: ${judgment.overruled?c}</h4>
+            <hr/>
+        </#list>
+        </blockquote>
+    </div>
+
+<#include "footer.html"/>
+</body>
+</html>
