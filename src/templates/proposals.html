@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+    <#include "head.html"/>
+
+    <#include "header.html"/>
+
+    <body>
+        <div class="wrapper">
+            <h2 class="center-text">Proposals</h2>
+
+            <#list proposals as proposal>
+            <blockquote class="status-${proposal.status}">
+                <div class="rule">
+                    <#if proposal.name??>
+                        ${proposal.num} - ${proposal.name}<br>
+                        ${proposal.proposal}
+                    <#else>
+                        ${proposal.num} - ${proposal.proposal}
+                    </#if>
+                </div>
+
+                <hr>
+                <div class="footer-col-wrapper status-${proposal.status}">
+                    <div class="footer-col footer-col-1">
+                        <ul class="contact-list">
+                            <li>Proposed by: {{firstname}} {{lastname}} on {{formatStandardTime proposeddate}}</li>
+                            <li>Voting opened: {{formatStandardTime voteopened}}</li>
+                            <li>Voting closed: {{formatStandardTime voteclosed}}</li>
+                            <li>Status: ${proposal.status}</li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col footer-col-2">
+                    </div>
+
+                    <div class="footer-col footer-col-3">
+                        <ul class="contact-list">
+                            <li>Votes in favor: 4 (Mike, Al, Paul, Harry)</li>
+                            <li>Votes against: 0</li>
+                            <li>Abstained: 1 (Steve)</li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+            </blockquote>
+            </#list>
+        </div>
+
+        <#include "footer.html"/>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+    <#include "head.html"/>
+
+    <#include "header.html"/>
+
+    <body>
+        <div class="wrapper">
+            <div id="leftcol">
+                <h3 class="center-text">Players</h3>
+                <table>
+                    <tr>
+                        <th class="center-text"></th>
+                        <th width="60%" class="center-text">Name</th>
+                        <th class="center-text">Pts</th>
+                        <th class="center-text">Lvl</th>
+                        <th class="center-text">GP</th>
+                    </tr>
+                    <#list players as player>
+                    <tr>
+                        <td class="center-text<#if player.onLeave> on-leave</#if>">
+                            <#if player.onLeave><img src="/images/vacation-icon.png"/></#if>
+                            <#if player.turn><img src="/images/chkmark.png"/></#if>
+                        </td>
+                        <td width="60%" class="center-text<#if player.onLeave> on-leave</#if>">${player.lastname}</td>
+                        <td class="center-text<#if player.onLeave> on-leave</#if>">${player.points}</td>
+                        <td class="center-text<#if player.onLeave> on-leave</#if>">${player.level}</td>
+                        <td class="center-text<#if player.onLeave> on-leave</#if>">${player.gold}</td>
+                    </tr>
+                    </#list>
+                </table>
+            </div>
+
+            <div id="middlecol">
+                <h2 class="center-text">Rules</h2>
+                <#list rules as rule>
+                <div class="rule">
+                    <#if rule.name??>
+                        ${rule.num} - ${rule.name}<br>
+                        ${rule.text}
+                    <#else>
+                        ${rule.num} - ${rule.text}
+                    </#if>
+                </div>
+                </#list>
+            </div>
+        </div>
+
+        <#include "footer.html"/>
+    </body>
+</html>
