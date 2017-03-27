@@ -54,6 +54,7 @@ public class CharnomicDAO {
                     player.setJoined(set.getDate("joined"));
                     player.setLeftGame(set.getDate("leftgame"));
                     player.setMonitor(set.getBoolean("monitor"));
+                    player.setVetoes(set.getInt("vetoes"));
                     players.add(player);
                 }
             }

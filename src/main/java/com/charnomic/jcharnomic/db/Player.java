@@ -24,6 +24,8 @@ public class Player {
 
     Integer gold;
 
+    Integer vetoes;
+
     Date leftGame;
 
     Boolean monitor;
@@ -114,5 +116,13 @@ public class Player {
 
     public void setMonitor(Boolean monitor) {
         this.monitor = monitor;
+    }
+
+    public Integer getVetoes() {
+        return vetoes;
+    }
+
+    public void setVetoes(Integer vetoes) {
+        this.vetoes = vetoes;
     }
 }

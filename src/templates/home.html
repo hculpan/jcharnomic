@@ -10,11 +10,12 @@
                 <h3 class="center-text">Players</h3>
                 <table>
                     <tr>
-                        <th class="center-text"></th>
-                        <th width="60%" class="center-text">Name</th>
+                        <th width="10%" class="center-text"></th>
+                        <th width="50%" class="center-text">Name</th>
                         <th class="center-text">Pts</th>
                         <th class="center-text">Lvl</th>
                         <th class="center-text">GP</th>
+                        <th class="center-text">Veto</th>
                     </tr>
                     <#list players as player>
                     <tr>
@@ -22,10 +23,11 @@
                             <#if player.onLeave><img src="/images/vacation-icon.png"/></#if>
                             <#if player.turn><img src="/images/chkmark.png"/></#if>
                         </td>
-                        <td width="60%" class="center-text<#if player.onLeave> on-leave</#if>">${player.lastname}</td>
+                        <td width="60%" class="center-text<#if player.onLeave> on-leave</#if>">${player.lastname}, ${player.firstname[0..<1]}.</td>
                         <td class="center-text<#if player.onLeave> on-leave</#if>">${player.points}</td>
                         <td class="center-text<#if player.onLeave> on-leave</#if>">${player.level}</td>
                         <td class="center-text<#if player.onLeave> on-leave</#if>">${player.gold}</td>
+                        <td class="center-text<#if player.onLeave> on-leave</#if>">${player.vetoes}</td>
                     </tr>
                     </#list>
                 </table>
