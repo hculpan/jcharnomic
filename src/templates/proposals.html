@@ -20,12 +20,13 @@
                     </#if>
                 </div>
 
-<!--                <div class="footer-col-wrapper status-${proposal.status}">
+                <div class="footer-col-wrapper status-${proposal.status}">
                     <div class="footer-col footer-col-1">
                         <ul class="contact-list">
-                            <li>Proposed by: {{firstname}} {{lastname}} on {{formatStandardTime proposeddate}}</li>
-                            <li>Voting opened: {{formatStandardTime voteopened}}</li>
-                            <li>Voting closed: {{formatStandardTime voteclosed}}</li>
+                            <li>Proposed by: ${proposal.proposedBy.firstname} ${proposal.proposedBy.lastname} on
+                                ${proposal.proposedDate?string.medium}</li>
+                            <li>Voting opened: ${proposal.voteOpened?string.medium}</li>
+                            <li>Voting closed: ${proposal.voteClosed?string.medium}</li>
                             <li>Status: ${proposal.status}</li>
                         </ul>
                     </div>
@@ -35,16 +36,13 @@
 
                     <div class="footer-col footer-col-3">
                         <ul class="contact-list">
-                            <li>Votes in favor: 4 (Mike, Al, Paul, Harry)</li>
-                            <li>Votes against: 0</li>
-                            <li>Abstained: 1 (Steve)</li>
+                            <li>Votes in favor: ${proposal.votesInFavor}</li>
+                            <li>Votes against: ${proposal.votesAgainst}</li>
+                            <li>Abstained: ${proposal.votesAbstained}</li>
+                            <li>Vetoes: ${proposal.votesVeto}</li>
                         </ul>
                     </div>
-                </div> -->
-                <details>
-                    <summary></summary>
-                    <p>The details element represents a disclosure widget from which the user can obtain additional information or controls.</p>
-                </details>
+                </div>
                 <hr/>
             </blockquote>
             </#list>

@@ -25,7 +25,9 @@ begin
         level INT DEFAULT 1,
         gold INT DEFAULT 0,
         vetoes INT DEFAULT 3,
+        totalvetoes INT DEFAULT 3,
         leftgame DATETIME NULL,
+        passwordexpired BOOLEAN DEFAULT 1,
         monitor BOOLEAN DEFAULT 0
     );
 

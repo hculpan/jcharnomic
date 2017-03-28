@@ -26,7 +26,11 @@ public class Player {
 
     Integer vetoes;
 
+    Integer totalVetoes;
+
     Date leftGame;
+
+    Boolean passwordExpired;
 
     Boolean monitor;
 
@@ -87,7 +91,7 @@ public class Player {
     }
 
     public Integer getLevel() {
-        return level;
+        return (int)Math.floor(1.725 * Math.sqrt(getPoints()) + 1);
     }
 
     public void setLevel(Integer level) {
@@ -124,5 +128,21 @@ public class Player {
 
     public void setVetoes(Integer vetoes) {
         this.vetoes = vetoes;
+    }
+
+    public Integer getTotalVetoes() {
+        return totalVetoes;
+    }
+
+    public void setTotalVetoes(Integer totalVetoes) {
+        this.totalVetoes = totalVetoes;
+    }
+
+    public Boolean getPasswordExpired() {
+        return passwordExpired;
+    }
+
+    public void setPasswordExpired(Boolean passwordExpired) {
+        this.passwordExpired = passwordExpired;
     }
 }

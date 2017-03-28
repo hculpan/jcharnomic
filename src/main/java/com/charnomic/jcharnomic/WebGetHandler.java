@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class WebGetHandler extends AbstractHandler {
 
-    static Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
+    public static Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
 
     CharnomicDAO charnomicDAO = new CharnomicDAO();
 
@@ -41,7 +41,10 @@ public class WebGetHandler extends AbstractHandler {
                          HttpServletResponse response ) throws IOException,
             ServletException {
         if (request.getMethod().equalsIgnoreCase("get")) {
-            if (target.equals("/home")) {
+            if (target.equals("/") || target.equals("/index.html")) {
+                response.sendRedirect("/home");
+                baseRequest.setHandled(true);
+            } else if (target.equals("/home")) {
                 try {
                     Template template = configuration.getTemplate("home.html");
 
@@ -74,6 +77,24 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
                     params.put("judgments", judgments);
+                    template.process(params, response.getWriter());
+                    baseRequest.setHandled(true);
+                } catch (TemplateException e) {
+                    e.printStackTrace();
+                }
+            } else if (target.equals("/about")) {
+                try {
+                    Template template = configuration.getTemplate("about.html");
+                    Map<String, Object> params = new HashMap<>();
+                    template.process(params, response.getWriter());
+                    baseRequest.setHandled(true);
+                } catch (TemplateException e) {
+                    e.printStackTrace();
+                }
+            } else if (target.equals("/initial_rules")) {
+                try {
+                    Template template = configuration.getTemplate("initial_rules.html");
+                    Map<String, Object> params = new HashMap<>();
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {

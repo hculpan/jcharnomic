@@ -189,6 +189,82 @@ begin
     insert into votes (vote, voterid, proposalid)
 		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 17));
 
+    insert into proposals (proposal, name, num, status, proposedby,
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
+      values ('<p>Rule 4 will be altered to read in its entirety:</p><p>Each player on their turn proposes one
+      rule-change and has it voted on. Each new proposal will receive the next successive integer
+      than the last proposal, whether or not it is adopted. The player whose turn it is, hereafter referred
+      to as Legislator, shall receive 5 points if they call for a vote on a proposal within 48 hours of the
+      start of their turn, regardless of the outcome of that vote. Any player (including the Legislator) who
+      votes in favor or against the proposal, but does not abstain, shall receive 5 points only if that
+      proposal is adopted. Players on Leave shall receive 5 points for every proposal that is accepted during
+      their period of absence.</p>', 'Proposals and Scoring', 18, 'passed', (select id from players where lastname = 'Culpan'),
+        '2017-03-22 08:57:00', '2017-03-24 20:20:00', '2017-03-25 01:14:00', 4, 0, 0, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 18));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 18));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 18));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 18));
+
+    insert into proposals (proposal, name, num, status, proposedby,
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
+      values ('<p>I propose updating the text of what is currently Rule 6 as follows,
+      and I call for a vote on this proposal:</p>
+      <ol type="a">
+        <li>A rule-change is adopted if and only if the proposal receives a majority (counting only
+        Active Players) of votes in favor and no Vetoes.</li>
+        <li>Any player may choose to abstain from the vote. If a player fails to vote within 3 days
+        of the vote being called, their vote will be assumed to be an abstention. For the sake
+        of clarity and explanation, votes may be any one of: yes, no, abstain (explicit),
+        abstain (implied by non-voting), or veto.</li>
+        <li>The voting must be completed within 7 days of the start of the proposing player''s turn
+        or the proposal will be rejected. The proposing player may call for a vote earlier than
+        that, and he or she determines the final form of the proposal to be voted on prior to
+        any votes being cast.</li>
+        An "Active Player" is any player who has not declared themselves on leave for the start
+        of the Voting Period, and who has not involuntarily passed their most recent turn.</li>
+        <li>As of the adoption of Proposal 19, each player is awarded 3 Vetoes.</li>
+        <li>A player may acquire more Vetoes by paying X gold, where X is the number of Vetoes
+        they have ever possessed.</li>
+        <li>When a veto is used to defeat a proposal, the player''s total number of vetoes is
+        reduced by one. The player cannot veto a proposal unless their total vetoes are greater
+        than zero.</li>
+      </ol>', 'Passing Rule Changes', 19, 'passed', (select id from players where lastname = 'Mele'),
+        '2017-03-25 08:00:00', '2017-03-25 19:11:00', '2017-03-26 12:52:00', 4, 0, 0, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 19));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 19));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 19));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 19));
+
+    insert into proposals (proposal, name, num, status, proposedby,
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
+      values ('<p>I propose that rule 16 be amended, adding bullet point #3 as follows:</p>
+      <p>A player''s level will be calculated based on their current point total, increasing and
+      decreasing according to the point total.  The following formula will be used to calculate
+      the level, rounded down to the nearest integer: 1.725 * Math.sqrt(POINT_TOTAL) + 1</p>',
+      null, 20, 'passed', (select id from players where lastname = 'Thomason'),
+        '2017-03-25 08:00:00', '2017-03-25 19:11:00', '2017-03-26 12:52:00', 4, 0, 0, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 20));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 20));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 20));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Chris'), (select id from proposals where num = 20));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 20));
+
     commit;
     
     -- Insert rules

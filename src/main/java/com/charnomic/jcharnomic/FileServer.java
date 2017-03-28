@@ -32,10 +32,9 @@ public class FileServer
         // Add the ResourceHandler to the server.
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
-                resource_handler,
-                new JsonDataHandler(),
                 new WebGetHandler(),
-                new DefaultHandler() });
+                resource_handler,
+                new ErrorGetHandler() });
         server.setHandler(handlers);
 
         // Start things up! By using the server.join() the server thread will join with the current thread.

@@ -14,13 +14,21 @@ public class Proposal {
 
     Integer num;
 
-    Integer proposedBy;
+    Player proposedBy;
 
     Date proposedDate;
 
     Date voteOpened;
 
     Date voteClosed;
+
+    Integer votesInFavor;
+
+    Integer votesAgainst;
+
+    Integer votesAbstained;
+
+    Integer votesVeto;
 
     String status;
 
@@ -56,11 +64,11 @@ public class Proposal {
         this.num = num;
     }
 
-    public Integer getProposedBy() {
+    public Player getProposedBy() {
         return proposedBy;
     }
 
-    public void setProposedBy(Integer proposedBy) {
+    public void setProposedBy(Player proposedBy) {
         this.proposedBy = proposedBy;
     }
 
@@ -94,5 +102,37 @@ public class Proposal {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getVotesInFavor() {
+        return votesInFavor;
+    }
+
+    public void setVotesInFavor(Integer votesInFavor) {
+        this.votesInFavor = votesInFavor;
+    }
+
+    public Integer getVotesAgainst() {
+        return votesAgainst;
+    }
+
+    public void setVotesAgainst(Integer votesAgainst) {
+        this.votesAgainst = votesAgainst;
+    }
+
+    public Integer getVotesAbstained() {
+        return votesAbstained;
+    }
+
+    public void setVotesAbstained(Integer votesAbstained) {
+        this.votesAbstained = votesAbstained;
+    }
+
+    public Integer getVotesVeto() {
+        return votesVeto;
+    }
+
+    public void setVotesVeto(Integer votesVeto) {
+        this.votesVeto = votesVeto;
     }
 }

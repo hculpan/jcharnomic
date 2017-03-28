@@ -42,24 +42,32 @@ public class CharnomicDAO {
             try (Statement statement = conn.createStatement()) {
                 ResultSet set = statement.executeQuery("select * from players where id = " + id.toString());
                 if (set.next()) {
-                    player = new Player();
-                    player.setId(set.getInt("id"));
-                    player.setLastname(set.getString("lastname"));
-                    player.setFirstname(set.getString("firstname"));
-                    player.setLevel(set.getInt("level"));
-                    player.setPoints(set.getInt("points"));
-                    player.setGold(set.getInt("gold"));
-                    player.setTurn(set.getBoolean("turn"));
-                    player.setOnLeave(set.getBoolean("onleave"));
-                    player.setJoined(set.getDate("joined"));
-                    player.setLeftGame(set.getDate("leftgame"));
-                    player.setMonitor(set.getBoolean("monitor"));
-                    player.setVetoes(set.getInt("vetoes"));
+                    player = createPlayer(set);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return player;
+    }
+
+    protected Player createPlayer(ResultSet set) throws SQLException {
+        Player player = new Player();
+        player.setId(set.getInt("id"));
+        player.setLastname(set.getString("lastname"));
+        player.setFirstname(set.getString("firstname"));
+        player.setLevel(set.getInt("level"));
+        player.setPoints(set.getInt("points"));
+        player.setGold(set.getInt("gold"));
+        player.setTurn(set.getBoolean("turn"));
+        player.setOnLeave(set.getBoolean("onleave"));
+        player.setJoined(set.getDate("joined"));
+        player.setLeftGame(set.getDate("leftgame"));
+        player.setMonitor(set.getBoolean("monitor"));
+        player.setVetoes(set.getInt("vetoes"));
+        player.setTotalVetoes(set.getInt("totalvetoes"));
+        player.setPasswordExpired(set.getBoolean("passwordexpired"));
 
         return player;
     }
@@ -71,20 +79,7 @@ public class CharnomicDAO {
             try (Statement statement = conn.createStatement()) {
                 ResultSet set = statement.executeQuery("select * from players");
                 while (set.next()) {
-                    Player player = new Player();
-                    player.setId(set.getInt("id"));
-                    player.setLastname(set.getString("lastname"));
-                    player.setFirstname(set.getString("firstname"));
-                    player.setLevel(set.getInt("level"));
-                    player.setPoints(set.getInt("points"));
-                    player.setGold(set.getInt("gold"));
-                    player.setTurn(set.getBoolean("turn"));
-                    player.setOnLeave(set.getBoolean("onleave"));
-                    player.setJoined(set.getDate("joined"));
-                    player.setLeftGame(set.getDate("leftgame"));
-                    player.setMonitor(set.getBoolean("monitor"));
-                    player.setVetoes(set.getInt("vetoes"));
-                    players.add(player);
+                    players.add(createPlayer(set));
                 }
             }
         } catch (SQLException e) {
@@ -136,10 +131,14 @@ public class CharnomicDAO {
                     proposal.setProposal(set.getString("proposal"));
                     proposal.setName(set.getString("name"));
                     proposal.setNum(set.getInt("num"));
-                    proposal.setProposedBy(set.getInt("proposedby"));
+                    proposal.setProposedBy(getPlayerById(set.getInt("proposedby")));
                     proposal.setProposedDate(set.getDate("proposeddate"));
                     proposal.setVoteOpened(set.getDate("voteopened"));
                     proposal.setVoteClosed(set.getDate("voteclosed"));
+                    proposal.setVotesInFavor(set.getInt("votesinfavor"));
+                    proposal.setVotesAgainst(set.getInt("votesagainst"));
+                    proposal.setVotesAbstained(set.getInt("votesabstained"));
+                    proposal.setVotesVeto(set.getInt("votesveto"));
                     proposal.setStatus(set.getString("status"));
                     proposals.add(proposal);
                 }
