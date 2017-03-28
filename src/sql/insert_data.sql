@@ -8,6 +8,7 @@ create procedure insert_data()
 begin
     delete from judgments;
     delete from rules;
+    delete from votes;
     delete from proposals;
     delete from players;
     
@@ -24,7 +25,7 @@ begin
     
     -- Insert proposals
     insert into proposals (proposal, name, num, status, proposedby,
-        proposeddate, voteopened, voteclosed)
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
       values ('Be it proposed that the first line of rule 6 will be changed to:
         "A rule-change is adopted if and only if the proposal receives votes in
         favor from a majority of players in the game."
@@ -38,10 +39,23 @@ begin
         call for a vote earlier than that, and he or she determines the final
         form of the proposal to be voted on prior to any votes being cast.',
         null, 12, 'failed', (select id from players where lastname = 'Culpan'),
-        '2017-02-25 17:00:00', '2017-02-27 20:00:00', '2017-03-28 08:00:00');
+        '2017-02-25 17:00:00', '2017-02-27 20:00:00', '2017-03-28 08:00:00', 5, 0, 0, 1);
+	
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 12));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Chris'), (select id from proposals where num = 12));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Bill'), (select id from proposals where num = 12));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 12));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 12));
+    insert into votes (vote, voterid, proposalid)
+		values ('Veto', (select id from players where firstname = 'Steve'), (select id from proposals where num = 12));
 
     insert into proposals (proposal, name, num, status, proposedby,
-        proposeddate, voteopened, voteclosed)
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
       values ('A new rule shall be added that says:
         A player may take temporary leave of the game by notifying the other
         players that they will not be playing and the dates of their
@@ -51,10 +65,25 @@ begin
         proposals while on Leave. The Player on Leave may rejoin the game
         early by notifying the other players and then resuming play.', 'Player on Leave',
         13, 'passed', (select id from players where lastname = 'Duignan'),
-        '2017-02-28 12:41:00', '2017-03-02 08:47:00', '2017-03-05 20:30:00');
+        '2017-02-28 12:41:00', '2017-03-02 08:47:00', '2017-03-05 20:30:00', 4, 0, 3, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Harry'), (select id from proposals where num = 13));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Chris'), (select id from proposals where num = 13));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Bill'), (select id from proposals where num = 13));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 13));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Al'), (select id from proposals where num = 13));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Steve'), (select id from proposals where num = 13));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 13));
 
     insert into proposals (proposal, name, num, status, proposedby,
-        proposeddate, voteopened, voteclosed)
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
       values ('A new Rule shall be enacted:
 
         No Proposal may be enacted which directly, specifically and negatively
@@ -66,10 +95,25 @@ begin
         not been on Leave, and (b) the proposal effects any players then on
         Leave more than those not on Leave.', 'The "No Targeting of Players
         on Leave" Act', 14, 'passed', (select id from players where lastname = 'Koehler'),
-        '2017-03-07 09:12:00', '2017-03-08 06:45:00', '2017-03-08 12:09:00');
+        '2017-03-07 09:12:00', '2017-03-08 06:45:00', '2017-03-08 12:09:00', 5, 0, 2, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 14));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Chris'), (select id from proposals where num = 14));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Bill'), (select id from proposals where num = 14));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Mike'), (select id from proposals where num = 14));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Al'), (select id from proposals where num = 14));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Steve'), (select id from proposals where num = 14));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 14));
 
     insert into proposals (proposal, name, num, status, proposedby,
-        proposeddate, voteopened, voteclosed)
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
       values ('I propose the following rule-change, being the enactment of rule 15 with the following content:
 
         Any player may request permission to invite one or more specifically named persons (each
@@ -88,15 +132,62 @@ begin
         the game which may be awarded to a Sponsor under this rule is 15. Players who have their turn
         involuntarily skipped twice consecutively are removed from the game by the Game Monitor.',
         null, 15, 'failed', (select id from players where lastname = 'Mele'),
-        '2017-03-08 19:21:00', '2017-03-09 18:58:00', '2017-03-09 21:59:00');
+        '2017-03-08 19:21:00', '2017-03-09 18:58:00', '2017-03-09 21:59:00', 2, 0, 2, 1);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Harry'), (select id from proposals where num = 15));
+    insert into votes (vote, voterid, proposalid)
+		values ('Veto', (select id from players where firstname = 'Chris'), (select id from proposals where num = 15));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 15));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Steve'), (select id from proposals where num = 15));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 15));
 
     insert into proposals (proposal, name, num, status, proposedby,
-        proposeddate, voteopened, voteclosed)
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
       values ('I propose a new rule be added that states:
 
         Each player is given a level starting at level 1.
         Each player will be given an initial account balance of 0 gold pieces.', null, 16, 'passed', (select id from players where lastname = 'Thomason'),
-        '2017-03-09 19:01:00', '2017-03-14 11:38:00', '2017-03-15 21:00:00');
+        '2017-03-09 19:01:00', '2017-03-14 11:38:00', '2017-03-15 21:00:00', 4, 0, 1, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 16));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 16));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 16));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Steve'), (select id from proposals where num = 16));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 16));
+
+    insert into proposals (proposal, name, num, status, proposedby,
+        proposeddate, voteopened, voteclosed, votesinfavor, votesagainst, votesabstained, votesveto)
+      values ('Players wishing to perform actions that require an election must formally and explicitly 
+		call for a vote on that specific action. The time period following that call is referred to as 
+        the ''Voting Period'', and the player initiating it is referred to as the ''Legislator''. A Voting 
+        Period continues until any one of the following occurs: the measure is formally withdrawn by the 
+        Legislator, all players not on leave have cast a vote, or any calendar rules governing the measure 
+        are obtained. After this, the Voting Period for that measure ends. Votes cast before or after the 
+        Voting Period of an action will be ignored and not considered for any purpose within the rules. A 
+        player may change his vote within the Voting Period, but the Voting Period will not be extended solely 
+        to permit time for players to change their vote. Actions that require a vote include, but may not be 
+        limited to, the adoption of a proposal.', 'Clarifying Voting', 17, 'passed', (select id from players where lastname = 'Wiegand'),
+        '2017-03-19 08:50:00', '2017-03-19 08:50:00', '2017-03-22 08:53:00', 4, 0, 1, 0);
+
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Harry'), (select id from proposals where num = 17));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Mike'), (select id from proposals where num = 17));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Al'), (select id from proposals where num = 17));
+    insert into votes (vote, voterid, proposalid)
+		values ('Abstain', (select id from players where firstname = 'Steve'), (select id from proposals where num = 17));
+    insert into votes (vote, voterid, proposalid)
+		values ('Yes', (select id from players where firstname = 'Paul'), (select id from proposals where num = 17));
 
     commit;
     

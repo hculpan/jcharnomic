@@ -8,6 +8,7 @@ create procedure create_db()
 begin
 	drop table if exists judgments;
     drop table if exists rules;
+    drop table if exists votes;
     drop table if exists proposals;
     drop table if exists players;
 
@@ -37,10 +38,29 @@ begin
         proposeddate DATETIME,
         voteopened DATETIME,
         voteclosed DATETIME,
+        votesinfavor INT DEFAULT 0,
+        votesagainst INT DEFAULT 0,
+        votesabstained INT DEFAULT 0,
+        votesveto INT DEFAULT 0,
         status varchar(10),
 
         FOREIGN KEY (proposedby)
               REFERENCES players(id)
+              ON DELETE CASCADE
+    );
+    
+    create table votes (
+        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        vote VARCHAR(7),
+        voterid INT,
+        proposalid INT,
+        
+        FOREIGN KEY (voterid)
+              REFERENCES players(id)
+              ON DELETE CASCADE,
+              
+        FOREIGN KEY (proposalid)
+              REFERENCES proposals(id)
               ON DELETE CASCADE
     );
 
