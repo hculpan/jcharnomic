@@ -121,7 +121,7 @@ public class CharnomicDAO {
 
         try (Connection conn =cpds.getConnection()) {
             try (Statement statement = conn.createStatement()) {
-                String sql = "select * from proposals";
+                String sql = "select * from proposals order by num desc";
                 if (status != null) {
                     if (status.length > 1) {
                         sql += " where status in ('" + String.join("','", status) + "')";
