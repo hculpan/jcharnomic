@@ -33,6 +33,7 @@ public class FileServer
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
                 new WebGetHandler(),
+                new LoginHandler(),
                 resource_handler,
                 new ErrorGetHandler() });
         server.setHandler(handlers);

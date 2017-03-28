@@ -100,6 +100,15 @@ public class WebGetHandler extends AbstractHandler {
                 } catch (TemplateException e) {
                     e.printStackTrace();
                 }
+            } else if (target.equals("/login")) {
+                try {
+                    Template template = configuration.getTemplate("login.html");
+                    Map<String, Object> params = new HashMap<>();
+                    template.process(params, response.getWriter());
+                    baseRequest.setHandled(true);
+                } catch (TemplateException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
