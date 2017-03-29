@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<#include "head.html"/>
+
+<#include "header.html"/>
+
+<body>
+<div class="wrapper">
+    <br><br>
+    <h2 class="center-text">${messageheader!}</h2>
+    <div class="center-text">${message!}</div>
+    <br><br>
+    <#if messageurl??>
+        <div class="center-text"><a href="${messageurl}">${messageurlname}</a></div>
+    </#if>
+    <br><br>
+</div>
+
+<#include "footer.html"/>
+</body>
+</html>

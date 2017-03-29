@@ -22,6 +22,28 @@ import java.util.UUID;
  * Created by harry on 3/28/17.
  */
 public class LoginHandler extends AbstractHandler {
+    protected void newLoginForPlayer(HttpServletResponse response, Player player) throws IOException {
+        CharnomicDAO charnomicDAO = new CharnomicDAO();
+
+        Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
+        cookie.setMaxAge(Integer.MAX_VALUE);
+        charnomicDAO.updatePlayerUuid(player, cookie.getValue());
+        response.addCookie(cookie);
+        response.sendRedirect("/home");
+    }
+
+    protected void sendMessage(HttpServletResponse response,
+                               String header, String message, String destination, String destinationName)
+            throws IOException, TemplateException {
+        Template template = WebGetHandler.configuration.getTemplate("message.html");
+        Map<String, Object> params = new HashMap<>();
+        params.put("messageheader", header);
+        params.put("message", message);
+        params.put("messageurl", destination);
+        params.put("messageurlname", destinationName);
+        template.process(params, response.getWriter());
+    }
+
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
@@ -32,25 +54,51 @@ public class LoginHandler extends AbstractHandler {
                 CharnomicDAO charnomicDAO = new CharnomicDAO();
                 if (charnomicDAO.checkPassword(request.getParameter("email"), request.getParameter("password"))) {
                     Player player = charnomicDAO.getPlayerByEmail(request.getParameter("email"));
-                    Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
-                    cookie.setMaxAge(Integer.MAX_VALUE);
-                    charnomicDAO.updatePlayerUuid(player, cookie.getValue());
-                    response.addCookie(cookie);
-                    cookie = new Cookie("user", player.getFirstname());
-                    cookie.setMaxAge(Integer.MAX_VALUE);
-                    response.addCookie(cookie);
-                    response.sendRedirect("/home");
+
+                    if (player.getPasswordExpired()) {
+                        response.sendRedirect("/update_password");
+                    } else {
+                        newLoginForPlayer(response, player);
+                    }
                 } else {
                     try {
-                        Template template = WebGetHandler.configuration.getTemplate("login.html");
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("message", "Invalid email or password");
-                        template.process(params, response.getWriter());
+                        sendMessage(response,
+                                "Login Failure",
+                                "Invalid email or password",
+                                "/login",
+                                "Back to Login");
                     } catch (TemplateException e) {
                         e.printStackTrace();
                     }
                 }
 
+                baseRequest.setHandled(true);
+            } else if (target.equals("/update_password")) {
+                String email = request.getParameter("email");
+                String p1 = request.getParameter("newpassword1");
+                String p2 = request.getParameter("newpassword2");
+
+                if (p1 == null || p1.trim().length() == 0) {
+                    try {
+                        sendMessage(response,
+                                "Illegal Password",
+                                "New password cannot be blank",
+                                "/update_password",
+                                "Change Password");
+                    } catch (TemplateException e) {
+                        e.printStackTrace();
+                    }
+                } else if (!p1.equals(p2)) {
+                    try {
+                        sendMessage(response,
+                                "Password Entries don't Match",
+                                "New passwords do not match",
+                                "/update_password",
+                                "Change Password");
+                    } catch (TemplateException e) {
+                        e.printStackTrace();
+                    }
+                }
                 baseRequest.setHandled(true);
             }
         }

@@ -71,6 +71,9 @@ public class WebGetHandler extends AbstractHandler {
                          HttpServletResponse response ) throws IOException,
             ServletException {
         if (request.getMethod().equalsIgnoreCase("get")) {
+            Map<String, Object> params = new HashMap<>();
+            addUserToParams(request, params);
+
             if (target.equals("/") || target.equals("/index.html")) {
                 response.sendRedirect("/home");
                 baseRequest.setHandled(true);
@@ -78,14 +81,11 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("home.html");
 
-                    Map<String, Object> params = new HashMap<>();
                     List<Player> players = getCharnomicDAO().retrievePlayers();
                     params.put("players", players);
 
                     List<Rule> rules = getCharnomicDAO().retrieveRules();
                     params.put("rules", rules);
-
-                    addUserToParams(request, params);
 
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
@@ -96,10 +96,8 @@ public class WebGetHandler extends AbstractHandler {
             } else if (target.equals("/proposals")) {
                 try {
                     Template template = configuration.getTemplate("proposals.html");
-                    Map<String, Object> params = new HashMap<>();
                     List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
                     params.put("proposals", proposals);
-                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -109,10 +107,8 @@ public class WebGetHandler extends AbstractHandler {
             } else if (target.equals("/judgments")) {
                 try {
                     Template template = configuration.getTemplate("judgments.html");
-                    Map<String, Object> params = new HashMap<>();
                     List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
                     params.put("judgments", judgments);
-                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -122,8 +118,6 @@ public class WebGetHandler extends AbstractHandler {
             } else if (target.equals("/about")) {
                 try {
                     Template template = configuration.getTemplate("about.html");
-                    Map<String, Object> params = new HashMap<>();
-                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -133,8 +127,6 @@ public class WebGetHandler extends AbstractHandler {
             } else if (target.equals("/initial_rules")) {
                 try {
                     Template template = configuration.getTemplate("initial_rules.html");
-                    Map<String, Object> params = new HashMap<>();
-                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -144,8 +136,14 @@ public class WebGetHandler extends AbstractHandler {
             } else if (target.equals("/login")) {
                 try {
                     Template template = configuration.getTemplate("login.html");
-                    Map<String, Object> params = new HashMap<>();
-                    addUserToParams(request, params);
+                    template.process(params, response.getWriter());
+                    baseRequest.setHandled(true);
+                } catch (TemplateException e) {
+                    e.printStackTrace();
+                }
+            } else if (target.equals("/update_password")) {
+                try {
+                    Template template = configuration.getTemplate("update_password.html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {
