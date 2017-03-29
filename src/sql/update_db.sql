@@ -10,6 +10,14 @@ begin
 
     alter table players modify password varchar(65);
 
+    alter table players add uuid char(36);
+
+    update players
+        set email='harry@culpan.org',
+            password='Fd0YPm9DpymTbMRbn9gRs6mN+lFd4pHGZhSlxPV2ViH7ABokg5ptbQoDDUse8Byk',
+            passwordexpired=0
+        where lastname = 'Culpan';
+
 end $$
 
 delimiter ;

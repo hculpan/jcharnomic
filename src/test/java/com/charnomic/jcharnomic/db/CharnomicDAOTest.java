@@ -3,6 +3,8 @@ package com.charnomic.jcharnomic.db;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 /**
@@ -17,3 +19,4 @@ public class CharnomicDAOTest {
         System.out.println("encrypted password='" + encryptedPassword + "'");
     }
 }
+
