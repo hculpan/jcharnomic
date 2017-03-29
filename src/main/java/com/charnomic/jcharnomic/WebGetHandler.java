@@ -54,6 +54,8 @@ public class WebGetHandler extends AbstractHandler {
                     List<Rule> rules = getCharnomicDAO().retrieveRules();
                     params.put("rules", rules);
 
+                    params.put("user", request.getSession().getAttribute("user"));
+
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -66,6 +68,7 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
                     params.put("proposals", proposals);
+                    params.put("user", request.getSession().getAttribute("user"));
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -78,6 +81,7 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
                     params.put("judgments", judgments);
+                    params.put("user", request.getSession().getAttribute("user"));
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -88,6 +92,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("about.html");
                     Map<String, Object> params = new HashMap<>();
+                    params.put("user", request.getSession().getAttribute("user"));
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -98,6 +103,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("initial_rules.html");
                     Map<String, Object> params = new HashMap<>();
+                    params.put("user", request.getSession().getAttribute("user"));
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -108,6 +114,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("login.html");
                     Map<String, Object> params = new HashMap<>();
+                    params.put("user", request.getSession().getAttribute("user"));
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {

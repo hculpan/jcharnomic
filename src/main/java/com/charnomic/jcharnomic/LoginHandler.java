@@ -26,12 +26,13 @@ public class LoginHandler extends AbstractHandler {
             if (target.equals("/authenticate")) {
                 CharnomicDAO charnomicDAO = new CharnomicDAO();
                 if (charnomicDAO.checkPassword(request.getParameter("email"), request.getParameter("password"))) {
-                    System.out.println("Password validated");
+                    request.getSession().setAttribute("user", "validated");
+                    response.sendRedirect("/home");
                 } else {
                     try {
                         Template template = WebGetHandler.configuration.getTemplate("login.html");
                         Map<String, Object> params = new HashMap<>();
-                        params.put("message", "Invalid logon credentials");
+                        params.put("message", "Invalid email or password");
                         template.process(params, response.getWriter());
                     } catch (TemplateException e) {
                         e.printStackTrace();

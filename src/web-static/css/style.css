@@ -358,12 +358,13 @@ pre {
 
 #leftcol {
   float: left;
-  width: 28%;
+  width: 30%;
 }
 
 #middlecol {
   float: left;
-  width: 70%;
+  width: 68%;
+  padding-left: 2%;
 }
 
 #rightcol {
