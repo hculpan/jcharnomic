@@ -8,6 +8,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -34,6 +35,36 @@ public class WebGetHandler extends AbstractHandler {
         }
     }
 
+    protected Player getUserFromCookies(HttpServletRequest request) {
+        Player result = null;
+        String uuid = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("uuid")) {
+                    uuid = cookie.getValue();
+                }
+            }
+        }
+
+        if (uuid != null && uuid.trim().length() > 0) {
+            result = getCharnomicDAO().getPlayerByUuid(uuid);
+            if (result.getPasswordExpired()) {
+                result = null;
+            }
+        }
+
+        return result;
+    }
+
+    protected void addUserToParams(HttpServletRequest request, Map<String, Object> params) {
+        Player player = getUserFromCookies(request);
+        if (player != null) {
+            params.put("activeplayer", player);
+        }
+    }
+
     public void handle( String target,
                         Request baseRequest,
                         HttpServletRequest request,
@@ -54,7 +85,7 @@ public class WebGetHandler extends AbstractHandler {
                     List<Rule> rules = getCharnomicDAO().retrieveRules();
                     params.put("rules", rules);
 
-                    params.put("user", request.getSession().getAttribute("user"));
+                    addUserToParams(request, params);
 
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
@@ -68,7 +99,7 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
                     params.put("proposals", proposals);
-                    params.put("user", request.getSession().getAttribute("user"));
+                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -81,7 +112,7 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
                     params.put("judgments", judgments);
-                    params.put("user", request.getSession().getAttribute("user"));
+                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -92,7 +123,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("about.html");
                     Map<String, Object> params = new HashMap<>();
-                    params.put("user", request.getSession().getAttribute("user"));
+                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -103,7 +134,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("initial_rules.html");
                     Map<String, Object> params = new HashMap<>();
-                    params.put("user", request.getSession().getAttribute("user"));
+                    addUserToParams(request, params);
                     response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
@@ -114,7 +145,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("login.html");
                     Map<String, Object> params = new HashMap<>();
-                    params.put("user", request.getSession().getAttribute("user"));
+                    addUserToParams(request, params);
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {

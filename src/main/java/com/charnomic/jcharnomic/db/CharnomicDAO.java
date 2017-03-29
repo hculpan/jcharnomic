@@ -75,6 +75,54 @@ public class CharnomicDAO {
         return player;
     }
 
+    public Player getPlayerByEmail(String email) {
+        Player player = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select * from players where lower(email) = '" + email.toLowerCase() + "'");
+                if (set.next()) {
+                    player = createPlayer(set);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return player;
+    }
+
+    public void updatePlayerUuid(Player player, String uuid) {
+        player.setUuid(uuid);
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                if (statement.executeUpdate("update players set uuid='" + uuid + "' where id=" + player.getId().toString()) != 1) {
+                    throw new SQLException("Unable to update uuid");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Player getPlayerByUuid(String uuid) {
+        Player player = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select * from players where uuid = '" + uuid + "'");
+                if (set.next()) {
+                    player = createPlayer(set);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return player;
+    }
+
     protected Player createPlayer(ResultSet set) throws SQLException {
         Player player = new Player();
         player.setId(set.getInt("id"));
@@ -91,6 +139,8 @@ public class CharnomicDAO {
         player.setVetoes(set.getInt("vetoes"));
         player.setTotalVetoes(set.getInt("totalvetoes"));
         player.setPasswordExpired(set.getBoolean("passwordexpired"));
+        player.setUuid(set.getString("uuid"));
+        player.setEmail(set.getString("email"));
 
         return player;
     }

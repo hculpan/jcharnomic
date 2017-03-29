@@ -385,6 +385,10 @@ pre {
   margin-left: 20px;
 }
 
+#headermenu .login-link {
+  text-align: right;
+}
+
 #headermenu .page-link:not(:last-child) {
     margin-right: 0;
 }
