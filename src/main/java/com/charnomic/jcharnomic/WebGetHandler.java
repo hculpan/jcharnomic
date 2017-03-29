@@ -1,7 +1,6 @@
 package com.charnomic.jcharnomic;
 
 import com.charnomic.jcharnomic.db.*;
-import freemarker.ext.beans.HashAdapter;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -55,6 +54,7 @@ public class WebGetHandler extends AbstractHandler {
                     List<Rule> rules = getCharnomicDAO().retrieveRules();
                     params.put("rules", rules);
 
+                    response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {
@@ -66,6 +66,7 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
                     params.put("proposals", proposals);
+                    response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {
@@ -77,6 +78,7 @@ public class WebGetHandler extends AbstractHandler {
                     Map<String, Object> params = new HashMap<>();
                     List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
                     params.put("judgments", judgments);
+                    response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {
@@ -86,6 +88,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("about.html");
                     Map<String, Object> params = new HashMap<>();
+                    response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {
@@ -95,6 +98,7 @@ public class WebGetHandler extends AbstractHandler {
                 try {
                     Template template = configuration.getTemplate("initial_rules.html");
                     Map<String, Object> params = new HashMap<>();
+                    response.setContentType("text/html");
                     template.process(params, response.getWriter());
                     baseRequest.setHandled(true);
                 } catch (TemplateException e) {

@@ -364,10 +364,52 @@ begin
         Targeting of Players on Leave" Act', 14, (select id from proposals where num=14));
 
     insert into rules (rule, name, num, proposalid)
+      values ('Players wishing to perform actions that require an election must formally and explicitly call
+        for a vote on that specific action. The time period following that call is referred to as the ''Voting Period'',
+        and the player initiating it is referred to as the ''Legislator’. A Voting Period continues until any one of the
+        following occurs: the measure is formally withdrawn by the Legislator, all players not on leave have cast a vote,
+        or any calendar rules governing the measure are obtained. After this, the Voting Period for that measure ends. Votes
+        cast before or after the Voting Period of an action will be ignored and not considered for any purpose within the rules.
+        A player may change his vote within the Voting Period, but the Voting Period will not be extended solely to permit
+        time for players to change their vote. Actions that require a vote include, but may not be limited to, the adoption
+        of a proposal.', 'Clarifying Voting', 17, (select id from proposals where num=17));
+
+    insert into rules (rule, name, num, proposalid)
+      values ('Each player on their turn proposes one rule-change and has it voted on. Each new proposal will receive
+        the next successive integer than the last proposal, whether or not it is adopted. The player whose turn it is,
+        hereafter referred to as Legislator, shall receive 5 points if they call for a vote on a proposal within 48 hours
+        of the start of their turn, regardless of the outcome of that vote. Any player (including the Legislator) who
+        votes in favor or against the proposal, but does not abstain, shall receive 5 points only if that proposal is
+        adopted. Players on Leave shall receive 5 points for every proposal that is accepted during their period of
+        absence.', 'Proposals and Scoring', 18, (select id from proposals where num=18));
+
+    insert into rules (rule, name, num, proposalid)
+      values ('<ol type="a">
+          <li>A rule-change is adopted if and only if the proposal receives a majority (counting only Active Players) of
+          votes in favor and no Vetoes.</li>
+          <li>Any player may choose to abstain from the vote. If a player fails to vote within 3 days of the vote being
+          called, their vote will be assumed to be an abstention. For the sake of clarity and explanation, votes may be
+          any one of: yes, no, abstain (explicit), abstain (implied by non-voting), or veto.</li>
+          <li>The voting must be completed within 7 days of the start of the proposing player''s turn or the proposal
+          will be rejected. The proposing player may call for a vote earlier than that, and he or she determines the
+          final form of the proposal to be voted on prior to any votes being cast.</li>
+          <li>An "Active Player" is any player who has not declared themselves on leave for the start of the Voting
+          Period, and who has not involuntarily passed their most recent turn.</li>
+          <li>As of the adoption of Proposal 19, each player is awarded 3 Vetoes.</li>
+          <li>A player may acquire more Vetoes by paying X gold, where X is the number of Vetoes they have ever
+          possessed.</li>
+          <li>When a veto is used to defeat a proposal, the player''s total number of vetoes is reduced by one. The
+          player cannot veto a proposal unless their total vetoes are greater than zero.</li>
+        </ol>', 'Passing Rule Changes', 19, (select id from proposals where num=19));
+
+  insert into rules (rule, name, num, proposalid)
       values ('<ol type="a">
           <li>Each player is given a level starting at level 1.</li>
           <li>Each player will be given an initial account balance of 0 gold pieces.</li>
-        </ol>', null, 16, (select id from proposals where num=16));
+          <li>A player''s level will be calculated based on their current point total, increasing
+            and decreasing according to the point total. The following formula will be used to
+            calculate the level, rounded down to the nearest integer: 1.725 * Math.sqrt(POINT_TOTAL) + 1</li>
+        </ol>', null, 20, (select id from proposals where num=20));
 
     commit;
     

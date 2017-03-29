@@ -1,6 +1,7 @@
 package com.charnomic.jcharnomic.db;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
@@ -24,7 +25,7 @@ public class CharnomicDAO {
             cpds.setDriverClass( "com.mysql.cj.jdbc.Driver" ); //loads the jdbc driver
             cpds.setJdbcUrl( jdbcUrl );
             cpds.setUser("root");
-            cpds.setPassword("09Ncd_945");
+            cpds.setPassword(System.getProperty("password"));
 
             // the settings below are optional -- c3p0 can work with defaults
             cpds.setMinPoolSize(1);
@@ -33,6 +34,28 @@ public class CharnomicDAO {
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getStoredPassword(String email) {
+        String result = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select password from players where lower(email) = '" + email.toLowerCase() + "'");
+                if (set.next()) {
+                    result = set.getString("password");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public boolean checkPassword(String email, String password) {
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        return passwordEncryptor.checkPassword(password, getStoredPassword(email));
     }
 
     public Player getPlayerById(Integer id) {
