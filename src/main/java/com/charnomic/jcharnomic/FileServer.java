@@ -2,7 +2,6 @@ package com.charnomic.jcharnomic;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
@@ -33,7 +32,7 @@ public class FileServer
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
                 new WebGetHandler(),
-                new LoginHandler(),
+                new WebPostHandler(),
                 resource_handler,
                 new ErrorGetHandler() });
         server.setHandler(handlers);

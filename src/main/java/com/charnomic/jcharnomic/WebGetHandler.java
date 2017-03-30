@@ -1,5 +1,6 @@
 package com.charnomic.jcharnomic;
 
+import com.charnomic.jcharnomic.annotation.ServiceMethod;
 import com.charnomic.jcharnomic.db.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +27,6 @@ public class WebGetHandler extends AbstractHandler {
 
     public static Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
 
-    CharnomicDAO charnomicDAO = new CharnomicDAO();
-
     static {
         try {
             configuration.setDirectoryForTemplateLoading(new File("./src/templates"));
@@ -35,34 +36,30 @@ public class WebGetHandler extends AbstractHandler {
         }
     }
 
-    protected Player getUserFromCookies(HttpServletRequest request) {
-        Player result = null;
-        String uuid = null;
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("uuid")) {
-                    uuid = cookie.getValue();
-                }
-            }
-        }
-
-        if (uuid != null && uuid.trim().length() > 0) {
-            result = getCharnomicDAO().getPlayerByUuid(uuid);
-            if (result.getPasswordExpired()) {
-                result = null;
-            }
-        }
-
-        return result;
+    protected void sendMessage(HttpServletResponse response,
+                               String header, String message, String destination, String destinationName)
+            throws IOException, TemplateException {
+        Template template = WebGetHandler.configuration.getTemplate("message.html");
+        Map<String, Object> params = new HashMap<>();
+        params.put("messageheader", header);
+        params.put("message", message);
+        params.put("messageurl", destination);
+        params.put("messageurlname", destinationName);
+        template.process(params, response.getWriter());
     }
 
-    protected void addUserToParams(HttpServletRequest request, Map<String, Object> params) {
-        Player player = getUserFromCookies(request);
-        if (player != null) {
-            params.put("activeplayer", player);
+    protected void handleError(Throwable t, HttpServletResponse response)  {
+        try {
+            sendMessage(response,
+                    "Unexpected Error",
+                    t.getLocalizedMessage() +
+                            "<br><div class='center-text'>Please contact administrator</div>",
+                    "/home.html",
+                    "Home");
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
         }
+
     }
 
     public void handle( String target,
@@ -71,28 +68,25 @@ public class WebGetHandler extends AbstractHandler {
                          HttpServletResponse response ) throws IOException,
             ServletException {
         if (request.getMethod().equalsIgnoreCase("get")) {
-            Map<String, Object> params = new HashMap<>();
-            addUserToParams(request, params);
-
-            if (target.equals("/") || target.equals("/index.html")) {
-                response.sendRedirect("/home");
+            if (target.equals("/") || target.equals("/index.html") || target.equals("/home")) {
+                response.sendRedirect("/home.html");
                 baseRequest.setHandled(true);
-            } else if (target.equals("/home")) {
+            } else {
                 try {
-                    Template template = configuration.getTemplate("home.html");
-
-                    List<Player> players = getCharnomicDAO().retrievePlayers();
-                    params.put("players", players);
-
-                    List<Rule> rules = getCharnomicDAO().retrieveRules();
-                    params.put("rules", rules);
-
-                    response.setContentType("text/html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
+                    WebDataService webDataService = new WebDataService();
+                    Map<String, Object> data = webDataService.retrieveData(target, request);
+                    if (data != null) {
+                        Template template = configuration.getTemplate(target);
+                        response.setContentType("text/html");
+                        template.process(data, response.getWriter());
+                        baseRequest.setHandled(true);
+                    }
+                } catch (TemplateException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
+                    handleError(e, response);
                 }
+            }
+/*
             } else if (target.equals("/proposals")) {
                 try {
                     Template template = configuration.getTemplate("proposals.html");
@@ -150,14 +144,7 @@ public class WebGetHandler extends AbstractHandler {
                     e.printStackTrace();
                 }
             }
+            */
         }
-    }
-
-    public CharnomicDAO getCharnomicDAO() {
-        return charnomicDAO;
-    }
-
-    public void setCharnomicDAO(CharnomicDAO charnomicDAO) {
-        this.charnomicDAO = charnomicDAO;
     }
 }

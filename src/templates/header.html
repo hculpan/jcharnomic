@@ -3,23 +3,25 @@
         <div id="headerimage"></div>
 
         <div id="headermenu">
-          <a class="page-link" href="/home">Home</a>
-          <a class="page-link" href="/judgments">Judgments</a>
-          <a class="page-link" href="/proposals">Proposals</a>
+          <a class="page-link" href="/home.html">Home</a>
+          <a class="page-link" href="/judgments.html">Judgments</a>
+          <a class="page-link" href="/proposals.html">Proposals</a>
           <a class="page-link" href="https://groups.google.com/group/charnomic" target="_blank">Forum</a>
-          <a class="page-link" href="/initial_rules">Initial Rule Set</a>
-          <a class="page-link" href="/about">About</a>
+          <a class="page-link" href="/initial_rules.html">Initial Rule Set</a>
+          <a class="page-link" href="/about.html">About</a>
           <#if (activeplayer.firstname)??>
-              <div class="dropdown">
+              <div class="dropdown" id="playermenu">
                   <a onclick="myFunction()" class="dropbtn page-link">${activeplayer.firstname}</a>
                   <div id="myDropdown" class="dropdown-content">
-                      <a href="/logout">Logout</a>
-                      <a href="/update_password">Change password</a>
+                      <a href="/logout.html">Logout</a>
+                      <a href="/update_password.html">Change password</a>
+                      <hr/>
+                      <a href="/active_player.html">Change Active Player</a>
                   </div>
               </div>
           <#else>
               <div class="dropdown">
-                  <a class='dropbtn page-link' href='/login'>Login</a>
+                  <a class='dropbtn page-link' href='/login.html'>Login</a>
               </div>
           </#if>
         </div>

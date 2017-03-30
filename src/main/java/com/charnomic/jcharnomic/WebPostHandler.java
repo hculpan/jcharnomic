@@ -20,7 +20,7 @@ import java.util.UUID;
 /**
  * Created by harry on 3/28/17.
  */
-public class LoginHandler extends AbstractHandler {
+public class WebPostHandler extends AbstractHandler {
     protected void newLoginForPlayer(HttpServletResponse response, Player player) throws IOException {
         CharnomicDAO charnomicDAO = new CharnomicDAO();
 
@@ -49,7 +49,7 @@ public class LoginHandler extends AbstractHandler {
                        HttpServletResponse response) throws IOException,
             ServletException {
         if (request.getMethod().equalsIgnoreCase("post")) {
-            if (target.equals("/authenticate")) {
+            if (target.equals("/authenticate.html")) {
                 CharnomicDAO charnomicDAO = new CharnomicDAO();
                 if (charnomicDAO.checkPassword(request.getParameter("username"), request.getParameter("password"))) {
                     Player player = charnomicDAO.getPlayerByEmail(request.getParameter("username"));
@@ -72,7 +72,7 @@ public class LoginHandler extends AbstractHandler {
                 }
 
                 baseRequest.setHandled(true);
-            } else if (target.equals("/update_password")) {
+            } else if (target.equals("/update_password.html")) {
                 CharnomicDAO charnomicDAO = new CharnomicDAO();
 
                 String email = request.getParameter("username");
@@ -130,7 +130,7 @@ public class LoginHandler extends AbstractHandler {
                 }
                 baseRequest.setHandled(true);
             }
-        } else if (target.equals("/logout")) {
+        } else if (target.equals("/logout.html")) {
             Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
             cookie.setMaxAge(0);
             response.addCookie(cookie);

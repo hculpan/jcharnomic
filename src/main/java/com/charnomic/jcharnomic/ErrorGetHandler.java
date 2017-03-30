@@ -22,9 +22,11 @@ public class ErrorGetHandler extends AbstractHandler {
                        HttpServletResponse response) throws IOException,
             ServletException {
         try {
+            WebDataService webDataService = new WebDataService();
             Template template = WebGetHandler.configuration.getTemplate("error404.html");
             Map<String, Object> params = new HashMap<>();
             params.put("target", target);
+            webDataService.addUserToParams(request, params);
             template.process(params, response.getWriter());
             baseRequest.setHandled(true);
         } catch (TemplateException e) {

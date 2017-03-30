@@ -415,6 +415,10 @@ pre {
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
+#playermenu hr {
+  border: 1px solid #137034;
+}
+
 #headermenu {
   font-size: 1.0em;
   padding: 0.5em 0.0em 0.5em 0.0em;
