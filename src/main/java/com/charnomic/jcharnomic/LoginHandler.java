@@ -2,7 +2,6 @@ package com.charnomic.jcharnomic;
 
 import com.charnomic.jcharnomic.db.CharnomicDAO;
 import com.charnomic.jcharnomic.db.Player;
-import com.charnomic.jcharnomic.db.Rule;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.eclipse.jetty.server.Request;
@@ -13,8 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,8 +51,8 @@ public class LoginHandler extends AbstractHandler {
         if (request.getMethod().equalsIgnoreCase("post")) {
             if (target.equals("/authenticate")) {
                 CharnomicDAO charnomicDAO = new CharnomicDAO();
-                if (charnomicDAO.checkPassword(request.getParameter("email"), request.getParameter("password"))) {
-                    Player player = charnomicDAO.getPlayerByEmail(request.getParameter("email"));
+                if (charnomicDAO.checkPassword(request.getParameter("username"), request.getParameter("password"))) {
+                    Player player = charnomicDAO.getPlayerByEmail(request.getParameter("username"));
 
                     if (player.getPasswordExpired()) {
                         response.sendRedirect("/update_password");
@@ -74,7 +73,9 @@ public class LoginHandler extends AbstractHandler {
 
                 baseRequest.setHandled(true);
             } else if (target.equals("/update_password")) {
-                String email = request.getParameter("email");
+                CharnomicDAO charnomicDAO = new CharnomicDAO();
+
+                String email = request.getParameter("username");
                 String p1 = request.getParameter("newpassword1");
                 String p2 = request.getParameter("newpassword2");
 
@@ -98,8 +99,51 @@ public class LoginHandler extends AbstractHandler {
                     } catch (TemplateException e) {
                         e.printStackTrace();
                     }
+                } else if (!charnomicDAO.checkPassword(email, request.getParameter("password"))) {
+                    try {
+                        sendMessage(response,
+                                "Login Failure",
+                                "Email or password is not valid",
+                                "/update_password",
+                                "Change Password");
+                    } catch (TemplateException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        charnomicDAO.updatePassword(email, p1);
+                        Player player = charnomicDAO.getPlayerByEmail(email);
+                        newLoginForPlayer(response, player);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        try {
+                            sendMessage(response,
+                                    "Login Failure",
+                                    "Unable to change password: " + e.getLocalizedMessage() +
+                                    "<br><div class='center-text'>Please contact administrator</div>",
+                                    "/update_password",
+                                    "Change Password");
+                        } catch (TemplateException te) {
+                            te.printStackTrace();
+                        }
+                    }
                 }
                 baseRequest.setHandled(true);
+            }
+        } else if (target.equals("/logout")) {
+            Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            baseRequest.setHandled(true);
+            try {
+                sendMessage(response,
+                        "Logged out of Charnomic",
+                        "<p>You have been logged out of the Charnomic web application.</p>" +
+                        "<p class='center-text'>You may continue to view information about the game.</p>",
+                        "/home",
+                        "Home");
+            } catch (TemplateException te) {
+                te.printStackTrace();
             }
         }
     }

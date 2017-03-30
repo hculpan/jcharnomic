@@ -106,6 +106,21 @@ public class CharnomicDAO {
         }
     }
 
+    public void updatePassword(String email, String newPassword) throws SQLException {
+        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+        String encryptedPassword = passwordEncryptor.encryptPassword(newPassword);
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                if (statement.executeUpdate("update players set password='" + encryptedPassword + "'," +
+                        "passwordexpired = 0 " +
+                        "  where email='" + email + "'") != 1) {
+                    throw new SQLException("Unable to update password");
+                }
+            }
+        }
+    }
+
     public Player getPlayerByUuid(String uuid) {
         Player player = null;
 

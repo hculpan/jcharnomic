@@ -10,9 +10,17 @@
           <a class="page-link" href="/initial_rules">Initial Rule Set</a>
           <a class="page-link" href="/about">About</a>
           <#if (activeplayer.firstname)??>
-              <div class="page-link">${activeplayer.firstname}</div>
+              <div class="dropdown">
+                  <a onclick="myFunction()" class="dropbtn page-link">${activeplayer.firstname}</a>
+                  <div id="myDropdown" class="dropdown-content">
+                      <a href="/logout">Logout</a>
+                      <a href="/update_password">Change password</a>
+                  </div>
+              </div>
           <#else>
-              <a class='page-link login-link' href='/login'>Login</a>
+              <div class="dropdown">
+                  <a class='dropbtn page-link' href='/login'>Login</a>
+              </div>
           </#if>
         </div>
     </div>

@@ -15,7 +15,7 @@ public class CharnomicDAOTest {
     @Test
     public void test() throws Exception {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
-        String encryptedPassword = passwordEncryptor.encryptPassword("09Ncd_945");
+        String encryptedPassword = passwordEncryptor.encryptPassword("blah");
         System.out.println("encrypted password='" + encryptedPassword + "'");
     }
 }
