@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by harryculpan on 3/26/17.
@@ -66,6 +68,10 @@ public class WebGetHandler extends AbstractHandler {
             if (target.equals("/") || target.equals("/index.html") || target.equals("/home")) {
                 response.sendRedirect("/home.html");
                 baseRequest.setHandled(true);
+            } else if (target.equals("/logout.html")) {
+                WebGetService webGetService = new WebGetService();
+                webGetService.logout(request, response);
+                baseRequest.setHandled(true);
             } else {
                 try {
                     WebGetService webGetService = new WebGetService();
@@ -81,65 +87,7 @@ public class WebGetHandler extends AbstractHandler {
                     handleError(e, response);
                 }
             }
-/*
-            } else if (target.equals("/proposals")) {
-                try {
-                    Template template = configuration.getTemplate("proposals.html");
-                    List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
-                    params.put("proposals", proposals);
-                    response.setContentType("text/html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
-                    e.printStackTrace();
-                }
-            } else if (target.equals("/judgments")) {
-                try {
-                    Template template = configuration.getTemplate("judgments.html");
-                    List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
-                    params.put("judgments", judgments);
-                    response.setContentType("text/html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
-                    e.printStackTrace();
-                }
-            } else if (target.equals("/about")) {
-                try {
-                    Template template = configuration.getTemplate("about.html");
-                    response.setContentType("text/html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
-                    e.printStackTrace();
-                }
-            } else if (target.equals("/initial_rules")) {
-                try {
-                    Template template = configuration.getTemplate("initial_rules.html");
-                    response.setContentType("text/html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
-                    e.printStackTrace();
-                }
-            } else if (target.equals("/login")) {
-                try {
-                    Template template = configuration.getTemplate("login.html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
-                    e.printStackTrace();
-                }
-            } else if (target.equals("/update_password")) {
-                try {
-                    Template template = configuration.getTemplate("update_password.html");
-                    template.process(params, response.getWriter());
-                    baseRequest.setHandled(true);
-                } catch (TemplateException e) {
-                    e.printStackTrace();
-                }
-            }
-            */
         }
     }
+
 }

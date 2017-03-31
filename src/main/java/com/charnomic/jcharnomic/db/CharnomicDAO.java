@@ -175,6 +175,7 @@ public class CharnomicDAO {
                         case vetoes: sql += " vetoes = " + p.getVetoes(); break;
                         case totalvetoes: sql += " totalvetoes = " + p.getTotalVetoes(); break;
                         case onleave: sql += " onleave = " + (p.getOnLeave() ? "1" : "0");
+                        case email: sql += " email = '" + p.getEmail() + "'"; break;
                     }
                     index++;
 
@@ -275,6 +276,10 @@ public class CharnomicDAO {
         }
 
         return rules;
+    }
+
+    public List<Proposal> retrieveProposal() {
+        return retrieveProposal((String)null);
     }
 
     public List<Proposal> retrieveProposal(String...status) {

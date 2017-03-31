@@ -2,41 +2,24 @@ package com.charnomic.jcharnomic;
 
 import com.charnomic.jcharnomic.annotation.ServiceMethod;
 import com.charnomic.jcharnomic.db.*;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by harryculpan on 3/30/17.
  */
-public class WebGetService {
-
-    CharnomicDAO charnomicDAO = new CharnomicDAO();
-
-    public Map<String, Object> retrieveData(String target, HttpServletRequest request)
-            throws InvocationTargetException, IllegalAccessException {
-        Map<String, Object> result = null;
-        for (Method method : getClass().getMethods()) {
-            ServiceMethod serviceMethod = method.getDeclaredAnnotation(ServiceMethod.class);
-
-            if (serviceMethod != null && !serviceMethod.targetPath().isEmpty() && serviceMethod.targetPath().equals(target)) {
-                result = new HashMap<>();
-                addUserToParams(request, result);
-                method.invoke(this, result);
-                break;
-            }
-        }
-
-        return result;
-    }
-
+public class WebGetService extends BaseService {
     @ServiceMethod(targetPath = "/judgments.html")
     public void getDataForJudgments(Map<String, Object> params) {
         List<Judgment> judgments = getCharnomicDAO().retrieveJudgments();
@@ -54,7 +37,7 @@ public class WebGetService {
 
     @ServiceMethod(targetPath = "/proposals.html")
     public void getDataForProposals(Map<String, Object> params) {
-        List<Proposal> proposals = getCharnomicDAO().retrieveProposal(null);
+        List<Proposal> proposals = getCharnomicDAO().retrieveProposal();
         params.put("proposals", proposals);
     }
 
@@ -74,6 +57,10 @@ public class WebGetService {
     public void getDataForUpdatePassword(Map<String, Object> params) {
     }
 
+    @ServiceMethod(targetPath = "/update_username.html")
+    public void getDataForUpdateUsername(Map<String, Object> params) {
+    }
+
     @ServiceMethod(targetPath = "/active_player.html")
     public void getDataForActivePlayer(Map<String, Object> params) {
         List<Player> players = getCharnomicDAO().retrievePlayers();
@@ -87,41 +74,34 @@ public class WebGetService {
         params.put("players", players);
     }
 
-    public Player getUserFromCookies(HttpServletRequest request) {
-        Player result = null;
-        String uuid = null;
+    public Boolean logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        sendMessage(response, request,
+                "Logged out of Charnomic",
+                "<p>You have been logged out of the Charnomic web application.</p>" +
+                        "<p class='center-text'>You may continue to view information about the game.</p>",
+                "/home.html",
+                "Home", false);
 
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("uuid")) {
-                    uuid = cookie.getValue();
-                }
-            }
-        }
+        return true;
+    }
 
-        if (uuid != null && uuid.trim().length() > 0) {
-            result = getCharnomicDAO().getPlayerByUuid(uuid);
-            if (result.getPasswordExpired()) {
-                result = null;
+    public Map<String, Object> retrieveData(String target, HttpServletRequest request)
+            throws InvocationTargetException, IllegalAccessException {
+        Map<String, Object> result = null;
+        for (Method method : getClass().getMethods()) {
+            ServiceMethod serviceMethod = method.getDeclaredAnnotation(ServiceMethod.class);
+
+            if (serviceMethod != null && !serviceMethod.targetPath().isEmpty() && serviceMethod.targetPath().equals(target)) {
+                result = new HashMap<>();
+                addUserToParams(request, result);
+                method.invoke(this, result);
+                break;
             }
         }
 
         return result;
-    }
-
-    public void addUserToParams(HttpServletRequest request, Map<String, Object> params) {
-        Player player = getUserFromCookies(request);
-        if (player != null) {
-            params.put("activeplayer", player);
-        }
-    }
-
-    public CharnomicDAO getCharnomicDAO() {
-        return charnomicDAO;
-    }
-
-    public void setCharnomicDAO(CharnomicDAO charnomicDAO) {
-        this.charnomicDAO = charnomicDAO;
     }
 }

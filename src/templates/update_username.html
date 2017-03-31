@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<#include "head.html"/>
+
+<#include "header.html"/>
+
+<body>
+<div class="wrapper">
+    <br><br><br>
+    <div id="leftcol"><h4>Update username:</h4></div>
+    <div id="middlecol">
+        <form action="/update_username.html" method="post">
+            <table>
+                <tr>
+                    <td align="right">Email address:</td>
+                    <td><input type="text" name="username" id="username" value="${(activeplayer.email)!}" readonly></td>
+                </tr>
+                <tr>
+                    <td align="right">New email address:</td>
+                    <td><input type="text" name="newusername" id = "newusername"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><br>
+                        <#if message??>${message}
+                        <#else>
+                            <p class="center-text">Be aware that this changes your username!</p>
+                            <p class="center-text">You will need to use this new address to login in the future.</p>
+                        </#if>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" value="Login"></td>
+                </tr>
+            </table>
+        </form>
+        <br><br><br>
+    </div>
+</div>
+
+<#include "footer.html"/>
+</body>
+</html>
