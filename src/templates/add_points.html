@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<#include "head.html"/>
+
+<#include "header.html"/>
+
+<body>
+<div class="wrapper">
+    <br><br><br>
+    <div id="leftcol"><h4>Add points:</h4></div>
+    <div id="middlecol">
+        <form action="/add_points.html" method="post">
+            <table>
+                <#list players as player>
+                <tr>
+                    <td align="right">${(player.firstname)!} ${(player.lastname)!}:</td>
+                    <td align="right">${player.points}</td>
+                    <td><input type="text" name="p_${player.id}" id="p_${player.id}" ></td>
+                </tr>
+                </#list>
+                <tr>
+                    <td colspan="3" align="center"><br><#if message??>${message}<#else></#if></td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="center"><input type="submit" value="Update"></td>
+                </tr>
+            </table>
+        </form>
+        <br><br><br>
+    </div>
+</div>
+
+<#include "footer.html"/>
+</body>
+</html>

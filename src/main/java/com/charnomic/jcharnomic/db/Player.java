@@ -6,6 +6,8 @@ import java.util.Date;
  * Created by harryculpan on 3/26/17.
  */
 public class Player {
+    public  enum updateablefields { firstname, lastname, turn, onleave, points, gold, vetoes, totalvetoes }
+
     Integer id;
 
     String firstname;

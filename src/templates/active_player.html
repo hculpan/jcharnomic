@@ -7,31 +7,28 @@
 <body>
 <div class="wrapper">
     <br><br><br>
-    <div id="leftcol"><h4>Login:</h4></div>
+    <div id="leftcol"><h4>Change active player:</h4></div>
     <div id="middlecol">
-        <form action="/update_password" method="post">
+        <form action="/active_player.html" method="post">
             <table>
                 <tr>
-                    <td align="right">Email address:</td>
-                    <td><input type="text" `name="username" id="username" value="${(activeplayer.email)!}"></td>
+                    <td align="right">Active player:</td>
+                    <td>${(movingplayer.firstname)!} ${(movingplayer.lastname)!}</td>
                 </tr>
                 <tr>
-                    <td align="right">Current Password:</td>
-                    <td><input type="password" name="password" id = "password"></td>
-                </tr>
-                <tr>
-                    <td align="right">New Password:</td>
-                    <td><input type="password" name="newpassword1" id="newpassword1"></td>
-                </tr>
-                <tr>
-                    <td align="right">Confirm New Password:</td>
-                    <td><input type="password" name="newpassword2" id="newpassword2"></td>
+                    <td align="right">New Active Player:</td>
+                    <td><select name="newactive">
+                        <#list players as player>
+                            <option value="${player.id}">${player.firstname} ${player.lastname}</option>
+                        </#list>
+                    </select>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><br><#if message??>${message}<#else></#if></td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center"><input type="submit" value="Login"></td>
+                    <td colspan="2" align="center"><input type="submit" value="Update"></td>
                 </tr>
             </table>
         </form>

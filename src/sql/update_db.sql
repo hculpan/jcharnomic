@@ -18,6 +18,12 @@ begin
             passwordexpired=0
         where lastname = 'Culpan';
 
+    create table gamelog (
+        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        event VARCHAR(255),
+        eventdate DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
 end $$
 
 delimiter ;

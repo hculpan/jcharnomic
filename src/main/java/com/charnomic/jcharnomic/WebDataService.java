@@ -74,6 +74,25 @@ public class WebDataService {
     public void getDataForUpdatePassword(Map<String, Object> params) {
     }
 
+    @ServiceMethod(targetPath = "/active_player.html")
+    public void getDataForActivePlayer(Map<String, Object> params) {
+        List<Player> players = getCharnomicDAO().retrievePlayers();
+        params.put("players", players);
+        params.put("movingplayer", getCharnomicDAO().getActivePlayer());
+    }
+
+    @ServiceMethod(targetPath = "/add_points.html")
+    public void getDataForAddPoints(Map<String, Object> params) {
+        List<Player> players = getCharnomicDAO().retrievePlayers();
+        params.put("players", players);
+    }
+
+    @ServiceMethod(targetPath = "/view_log.html")
+    public void getDataForViewLog(Map<String, Object> params) {
+        List<Event> events = getCharnomicDAO().retrieveEventLog();
+        params.put("events", events);
+    }
+
     public Player getUserFromCookies(HttpServletRequest request) {
         Player result = null;
         String uuid = null;

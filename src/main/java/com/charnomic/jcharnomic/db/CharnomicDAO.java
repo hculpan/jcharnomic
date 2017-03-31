@@ -53,6 +53,40 @@ public class CharnomicDAO {
         return result;
     }
 
+    public void updateEventLog(String event) {
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                String sql = "insert into gamelog (event) values ('" + event + "')";
+                if (statement.executeUpdate(sql) != 1) {
+                    throw new SQLException("Unable to update all players");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Event> retrieveEventLog() {
+        List<Event> events = new ArrayList<>();
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select * from gamelog order by eventdate");
+                while (set.next()) {
+                    Event event = new Event();
+                    event.setId(set.getInt("id"));
+                    event.setEvent(set.getString("event"));
+                    event.setEventDate(set.getDate("eventdate"));
+                    events.add(event);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return events;
+    }
+
     public boolean checkPassword(String email, String password) {
         StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         return passwordEncryptor.checkPassword(password, getStoredPassword(email));
@@ -92,6 +126,40 @@ public class CharnomicDAO {
         return player;
     }
 
+    public Player getActivePlayer() {
+        Player player = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select * from players where turn = 1");
+                if (set.next()) {
+                    player = createPlayer(set);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return player;
+    }
+
+    public void setActivePlayer(Player player) {
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                if (statement.executeUpdate("update players set turn = 0") == 0) {
+                    throw new SQLException("Unable to update all players");
+                }
+                if (statement.executeUpdate("update players set turn = 1 where id = " + player.getId()) != 1) {
+                    throw new SQLException("Unable to update active player");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        updateEventLog("Set " + player.getFirstname() + " " + player.getLastname() + " [" + player.getId() + "] as active player");
+    }
+
     public void updatePlayerUuid(Player player, String uuid) {
         player.setUuid(uuid);
 
@@ -104,6 +172,8 @@ public class CharnomicDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        updateEventLog("Set " + player.getFirstname() + " " + player.getLastname() + " [" + player.getId() + "] uuid to " + uuid);
     }
 
     public void updatePassword(String email, String newPassword) throws SQLException {
@@ -119,6 +189,50 @@ public class CharnomicDAO {
                 }
             }
         }
+        updateEventLog("Updated password for " + email);
+    }
+
+    public void updatePlayerData(Player p, Player.updateablefields...fields) {
+        if (fields == null || fields.length == 0) return;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                String sql = "update players set ";
+
+                int index = 0;
+                for (Player.updateablefields field : fields) {
+                    switch (field) {
+                        case firstname: sql += "firstname = '" + p.getFirstname() + "' "; break;
+                        case lastname: sql += "lastname = '" + p.getLastname() + "' "; break;
+                        case turn: sql += " turn = " + (p.getTurn() ? "1 " : "0 "); break;
+                        case gold: sql += " gold = " + p.getGold(); break;
+                        case points: sql += " points = " + p.getPoints(); break;
+                        case vetoes: sql += " vetoes = " + p.getVetoes(); break;
+                        case totalvetoes: sql += " totalvetoes = " + p.getTotalVetoes(); break;
+                        case onleave: sql += " onleave = " + (p.getOnLeave() ? "1" : "0");
+                    }
+                    index++;
+
+                    if (index < fields.length) {
+                        sql += ",";
+                    }
+                }
+
+                sql += " where id = " + p.getId();
+
+                if (statement.executeUpdate(sql) == 0) {
+                    throw new SQLException("Unable to update player");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String msg = "Data updated for " + p.getFirstname() + " " + p.getLastname() + " [" + p.getId() + "]: ";
+        for (Player.updateablefields field : fields) {
+            msg += field.toString() + ", ";
+        }
+        updateEventLog(msg.substring(0, msg.length() - 2));
     }
 
     public Player getPlayerByUuid(String uuid) {
