@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by harryculpan on 3/30/17.
  */
-public class WebDataService {
+public class WebGetService {
 
     CharnomicDAO charnomicDAO = new CharnomicDAO();
 
@@ -85,12 +85,6 @@ public class WebDataService {
     public void getDataForAddPoints(Map<String, Object> params) {
         List<Player> players = getCharnomicDAO().retrievePlayers();
         params.put("players", players);
-    }
-
-    @ServiceMethod(targetPath = "/view_log.html")
-    public void getDataForViewLog(Map<String, Object> params) {
-        List<Event> events = getCharnomicDAO().retrieveEventLog();
-        params.put("events", events);
     }
 
     public Player getUserFromCookies(HttpServletRequest request) {

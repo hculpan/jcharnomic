@@ -36,6 +36,10 @@ public class CharnomicDAO {
         }
     }
 
+    public Connection getConnection() throws SQLException {
+        return cpds.getConnection();
+    }
+
     public String getStoredPassword(String email) {
         String result = null;
 
@@ -51,40 +55,6 @@ public class CharnomicDAO {
         }
 
         return result;
-    }
-
-    public void updateEventLog(String event) {
-        try (Connection conn = cpds.getConnection()) {
-            try (Statement statement = conn.createStatement()) {
-                String sql = "insert into gamelog (event) values ('" + event + "')";
-                if (statement.executeUpdate(sql) != 1) {
-                    throw new SQLException("Unable to update all players");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<Event> retrieveEventLog() {
-        List<Event> events = new ArrayList<>();
-
-        try (Connection conn = cpds.getConnection()) {
-            try (Statement statement = conn.createStatement()) {
-                ResultSet set = statement.executeQuery("select * from gamelog order by eventdate");
-                while (set.next()) {
-                    Event event = new Event();
-                    event.setId(set.getInt("id"));
-                    event.setEvent(set.getString("event"));
-                    event.setEventDate(set.getDate("eventdate"));
-                    events.add(event);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return events;
     }
 
     public boolean checkPassword(String email, String password) {
@@ -156,8 +126,6 @@ public class CharnomicDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        updateEventLog("Set " + player.getFirstname() + " " + player.getLastname() + " [" + player.getId() + "] as active player");
     }
 
     public void updatePlayerUuid(Player player, String uuid) {
@@ -172,8 +140,6 @@ public class CharnomicDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        updateEventLog("Set " + player.getFirstname() + " " + player.getLastname() + " [" + player.getId() + "] uuid to " + uuid);
     }
 
     public void updatePassword(String email, String newPassword) throws SQLException {
@@ -189,7 +155,6 @@ public class CharnomicDAO {
                 }
             }
         }
-        updateEventLog("Updated password for " + email);
     }
 
     public void updatePlayerData(Player p, Player.updateablefields...fields) {
@@ -232,7 +197,6 @@ public class CharnomicDAO {
         for (Player.updateablefields field : fields) {
             msg += field.toString() + ", ";
         }
-        updateEventLog(msg.substring(0, msg.length() - 2));
     }
 
     public Player getPlayerByUuid(String uuid) {

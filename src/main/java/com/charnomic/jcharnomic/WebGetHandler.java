@@ -1,7 +1,5 @@
 package com.charnomic.jcharnomic;
 
-import com.charnomic.jcharnomic.annotation.ServiceMethod;
-import com.charnomic.jcharnomic.db.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -9,15 +7,12 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,8 +68,8 @@ public class WebGetHandler extends AbstractHandler {
                 baseRequest.setHandled(true);
             } else {
                 try {
-                    WebDataService webDataService = new WebDataService();
-                    Map<String, Object> data = webDataService.retrieveData(target, request);
+                    WebGetService webGetService = new WebGetService();
+                    Map<String, Object> data = webGetService.retrieveData(target, request);
                     if (data != null) {
                         Template template = configuration.getTemplate(target);
                         response.setContentType("text/html");

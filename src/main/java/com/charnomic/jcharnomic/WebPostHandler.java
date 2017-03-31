@@ -22,30 +22,6 @@ import java.util.UUID;
  * Created by harry on 3/28/17.
  */
 public class WebPostHandler extends AbstractHandler {
-    protected void newLoginForPlayer(HttpServletResponse response, Player player) throws IOException {
-        CharnomicDAO charnomicDAO = new CharnomicDAO();
-
-        Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
-        cookie.setMaxAge(Integer.MAX_VALUE);
-        charnomicDAO.updatePlayerUuid(player, cookie.getValue());
-        response.addCookie(cookie);
-        response.sendRedirect("/home");
-    }
-
-    protected void sendMessage(HttpServletResponse response, HttpServletRequest request,
-                               String header, String message, String destination, String destinationName)
-            throws IOException, TemplateException {
-        Template template = WebGetHandler.configuration.getTemplate("message.html");
-        Map<String, Object> params = new HashMap<>();
-        params.put("messageheader", header);
-        params.put("message", message);
-        params.put("messageurl", destination);
-        params.put("messageurlname", destinationName);
-        WebDataService webDataService = new WebDataService();
-        webDataService.addUserToParams(request, params);
-        template.process(params, response.getWriter());
-    }
-
     public void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
@@ -181,10 +157,43 @@ public class WebPostHandler extends AbstractHandler {
                         "<p>You have been logged out of the Charnomic web application.</p>" +
                         "<p class='center-text'>You may continue to view information about the game.</p>",
                         "/home.html",
-                        "Home");
+                        "Home", false);
             } catch (TemplateException te) {
                 te.printStackTrace();
             }
         }
     }
+
+    protected void newLoginForPlayer(HttpServletResponse response, Player player) throws IOException {
+        CharnomicDAO charnomicDAO = new CharnomicDAO();
+
+        Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
+        cookie.setMaxAge(Integer.MAX_VALUE);
+        charnomicDAO.updatePlayerUuid(player, cookie.getValue());
+        response.addCookie(cookie);
+        response.sendRedirect("/home");
+    }
+
+    protected void sendMessage(HttpServletResponse response, HttpServletRequest request,
+                               String header, String message, String destination, String destinationName)
+            throws IOException, TemplateException {
+        sendMessage(response, request, header, message, destination, destinationName, true);
+    }
+
+    protected void sendMessage(HttpServletResponse response, HttpServletRequest request,
+                               String header, String message, String destination, String destinationName, Boolean addPlayer)
+            throws IOException, TemplateException {
+        Template template = WebGetHandler.configuration.getTemplate("message.html");
+        Map<String, Object> params = new HashMap<>();
+        params.put("messageheader", header);
+        params.put("message", message);
+        params.put("messageurl", destination);
+        params.put("messageurlname", destinationName);
+        if (addPlayer) {
+            WebGetService webGetService = new WebGetService();
+            webGetService.addUserToParams(request, params);
+        }
+        template.process(params, response.getWriter());
+    }
+
 }
