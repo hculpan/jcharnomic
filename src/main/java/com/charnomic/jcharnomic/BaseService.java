@@ -37,7 +37,7 @@ public class BaseService {
 
         if (uuid != null && uuid.trim().length() > 0) {
             result = getCharnomicDAO().getPlayerByUuid(uuid);
-            if (result.getPasswordExpired()) {
+            if (result != null && result.getPasswordExpired()) {
                 result = null;
             }
         }
