@@ -70,6 +70,7 @@ public class BaseService {
                 WebGetService webGetService = new WebGetService();
                 webGetService.addUserToParams(request, params);
             }
+            response.setContentType("text/html");
             template.process(params, response.getWriter());
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
