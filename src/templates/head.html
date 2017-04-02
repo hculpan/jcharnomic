@@ -8,8 +8,121 @@
   <link rel="icon" type="image/png" href="/images/favicon.png" />
 
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <script src="/js/jquery-3.2.0.min.js"></script>
-  <script src="/js/main.js"></script>
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+  <style>
+    body {
+      padding-top: 200px;
+    }
+
+    /***Navbar Background Color, Border Removed ,Border Radius Sqaure***/
+
+    .navbar.navbar-custom {
+      background: #139034;
+      border: none;
+      border-radius: 0;
+    }
+    /***Link Color***/
+
+    .navbar.navbar-custom .navbar-nav > li > a {
+      color: white;
+    }
+    /***Link Color Hover Statr***/
+
+    .navbar.navbar-custom .navbar-nav > li > a:hover {
+      color: lightgray;
+    }
+    /***Link Background and Color Active State***/
+
+    .navbar.navbar-custom .navbar-nav > .active,
+    .navbar.navbar-custom .navbar-nav > .active > a,
+    .navbar.navbar-custom .navbar-nav > .active > a:hover,
+    .navbar.navbar-custom .navbar-nav > .active > a:focus {
+      background: #139034;
+      color: white;
+    }
+    /***Navbar Brand Link Color***/
+
+    .navbar.navbar-custom .navbar-brand {
+      color: #f00;
+    }
+    /***Navbar Brand Link Color Hover State***/
+
+    .navbar.navbar-custom .navbar-brand:hover {
+      color: #ff0;
+    }
+    /***Dropdown Background Active State***/
+
+    .navbar.navbar-custom .nav li.dropdown.open > .dropdown-toggle,
+    .navbar.navbar-custom .nav li.dropdown.active > .dropdown-toggle,
+    .navbar.navbar-custom .nav li.dropdown.open.active > .dropdown-toggle {
+      background: #139034;
+      color: white;
+    }
+    /***Dropdown-menu Background Color***/
+
+    .navbar.navbar-custom .dropdown-menu {
+      background: #139034;
+      border: none;
+    }
+    /***Dropdown-menu Color***/
+
+    .navbar.navbar-custom .dropdown-menu > li > a {
+      color: white;
+    }
+    /***Dropdown-menu Color Hover and Focus State***/
+
+    .navbar.navbar-custom .dropdown-menu > li > a:hover,
+    .navbar.navbar-custom .dropdown-menu > li > a:focus {
+      color: lightgray;
+      background: #139034;
+    }
+    /***Toggle Button***/
+
+    .navbar.navbar-custom .navbar-header .navbar-toggle {
+      border-color: #f00;
+    }
+    /***Toggle Button Hover and Focus State***/
+
+    .navbar.navbar-custom .navbar-header .navbar-toggle:hover,
+    .navbar.navbar-custom .navbar-header .navbar-toggle:focus {
+      background: #139034;
+      border: #f00;
+    }
+    /***Collapse Borders***/
+
+    .navbar.navbar-custom .navbar-collapse {
+      border: none;
+    }
+    @media (max-width: 767px) {
+      .navbar.navbar-custom li.dropdown .dropdown-menu > li > a {
+        color: white;
+      }
+      /***Dropdown-menu Color Hover and Focus State***/
+      .navbar.navbar-custom li.dropdown .dropdown-menu > li > a:hover,
+      .navbar.navbar-custom li.dropdown .dropdown-menu > li > a:focus {
+        color: white;
+        background: #139034;
+      }
+    }
+
+    #headerimage {
+      width: 100%;
+      height: 130px;
+      background: #FFFFFF url('/images/charnomic-logo.jpg') no-repeat top left;
+    }
+
+    .wide {
+      background-color: white;
+
+    }
+
+    .wide img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
 </head>

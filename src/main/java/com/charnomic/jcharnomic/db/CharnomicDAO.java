@@ -278,23 +278,24 @@ public class CharnomicDAO {
         return rules;
     }
 
-    public List<Proposal> retrieveProposal() {
+/*    public List<Proposal> retrieveProposal() {
         return retrieveProposal((String)null);
-    }
+    }*/
 
     public List<Proposal> retrieveProposal(String...status) {
         List<Proposal> proposals = new ArrayList<>();
 
         try (Connection conn =cpds.getConnection()) {
             try (Statement statement = conn.createStatement()) {
-                String sql = "select * from proposals order by num desc";
+                String sql = "select * from proposals ";
                 if (status != null) {
                     if (status.length > 1) {
                         sql += " where status in ('" + String.join("','", status) + "')";
-                    } else {
+                    } else if (status.length == 1) {
                         sql += " where status = '" + status + "'";
                     }
                 }
+                sql += " order by num desc";
                 ResultSet set = statement.executeQuery(sql);
                 while (set.next()) {
                     Proposal proposal = new Proposal();

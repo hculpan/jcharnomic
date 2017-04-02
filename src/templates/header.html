@@ -1,33 +1,47 @@
-<header class="site-header" role="banner">
-    <div class="wrapper">
-        <div id="headerimage"></div>
-
-        <div id="headermenu">
-          <a class="page-link" href="/home.html">Home</a>
-          <a class="page-link" href="/judgments.html">Judgments</a>
-          <a class="page-link" href="/proposals.html">Proposals</a>
-          <a class="page-link" href="https://groups.google.com/group/charnomic" target="_blank">Forum</a>
-          <a class="page-link" href="/initial_rules.html">Initial Rule Set</a>
-          <a class="page-link" href="/about.html">About</a>
-          <#if (activeplayer.firstname)??>
-              <div class="dropdown" id="playermenu">
-                  <a onclick="myFunction()" class="dropbtn page-link">${activeplayer.firstname}</a>
-                  <div id="myDropdown" class="dropdown-content">
-                      <a href="/logout.html">Logout</a>
-                      <a href="/update_password.html">Change password</a>
-                      <a href="/update_username.html">Change email/username</a>
-                      <#if activeplayer.monitor>
-                          <hr/>
-                          <a href="/active_player.html">Change Active Player</a>
-                          <a href="/add_points.html">Add Points</a>
-                      </#if>
-                  </div>
-              </div>
-          <#else>
-              <div class="dropdown">
-                  <a class='dropbtn page-link' href='/login.html'>Login</a>
-              </div>
-          </#if>
+<nav class="navbar navbar-inverse navbar-fixed-top navbar-custom" role="banner">
+    <div class="wide">
+        <div class="container">
+            <img src="/images/charnomic-logo.jpg"/>
         </div>
     </div>
-</header>
+
+    <div class="container">
+        <div id="navbar-header">
+            <div class="navbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="/home.html">Home</a></li>
+                    <li><a href="/judgments.html">Judgments</a></li>
+                    <li><a href="/proposals.html">Proposals</a></li>
+                    <li><a href="https://groups.google.com/group/charnomic" target="_blank">Forum</a></li>
+                    <li><a href="/initial_rules.html">Initial Rule Set</a></li>
+                    <li><a href="/about.html">About</a></li>
+                </ul>
+                    <#if (activeplayer.firstname)??>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown navbar-right">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                   role="button" aria-haspopup="true" aria-expanded="false">
+                                    ${activeplayer.firstname}
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/logout.html">Logout</a></li>
+                                    <li><a href="/update_password.html">Change password</a></li>
+                                    <li><a href="/update_username.html">Change email/username<</a></li>
+                                    <#if activeplayer.monitor>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="/active_player.html">Change Active Player</a></li>
+                                        <li><a href="/add_points.html">Add Points</a></li>
+                                    </#if>
+                                </ul>
+                        </li>
+                        </ul>
+                    <#else>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href='/login.html'>Login</a></li>
+                    </ul>
+                    </#if>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
