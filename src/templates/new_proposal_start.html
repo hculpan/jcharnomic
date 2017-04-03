@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<#include "head.html"/>
+
+<#include "header.html"/>
+
+<body>
+<div class="container">
+    <br><br><br>
+    <div id="leftcol"><h4>New proposal:</h4></div>
+    <div id="middlecol">
+        <form id="new_proposal_form" action="/new_proposal_start.html" method="post">
+            <div class="radio">
+                <label><input type="radio" name="proptype" value="new" checked>New rule</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="proptype" value="amend">Amend existing rule</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="proptype" value="repeal">Repeal rule</label>
+            </div>
+            <a class="w3-right w3-btn" href="javascript:{}" onclick="new_proposal_form.submit();">Next &#10095;</a>
+        </form>
+        <br><br><br>
+    </div>
+</div>
+
+<#include "footer.html"/>
+</body>
+</html>

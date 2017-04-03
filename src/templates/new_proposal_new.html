@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<#include "head.html"/>
+
+<#include "header.html"/>
+
+<body>
+<div class="container">
+    <br><br><br>
+    <div id="leftcol"><h4>New proposal:</h4></div>
+    <div id="middlecol">
+        <form id="new_proposal_form" action="/new_proposal_new.html" method="post">
+            <table>
+                <tr>
+                    <td class="text-right">Proposal Number:</td>
+                    <td><input type="text" name="propnum" value="${proposalnum}" readonly></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right">Proposal Name:</td>
+                    <td><input type="text" name="propname"></td>
+                    <td class="text-left"><p class="text-left">(optional)</p></td>
+                </tr>
+                <tr>
+                    <td class="text-right" style="vertical-align: top">Proposal:</td>
+                    <td colspan="2"><textarea class="form-control" rows="15" cols="40" name="proptext"></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-center"><br><#if message??>${message}<#else></#if></td>
+                </tr>
+            </table>
+            <a class="w3-right w3-btn" href="javascript:{}" onclick="new_proposal_form.submit();">Next &#10095;</a>
+        </form>
+        <br><br><br>
+    </div>
+</div>
+
+<#include "footer.html"/>
+</body>
+</html>

@@ -74,6 +74,26 @@ public class WebGetService extends BaseService {
         params.put("players", players);
     }
 
+    @ServiceMethod(targetPath = "/new_proposal_start.html")
+    public void getDataForNewProposal(Map<String, Object> params) {
+    }
+
+    @ServiceMethod(targetPath = "/new_proposal_new.html")
+    public void getDataForProposalNew(Map<String, Object> params) {
+        Integer nextNum = getCharnomicDAO().retrieveNextProposalNum();
+        if (nextNum != null) {
+            params.put("proposalnum", nextNum);
+        }
+    }
+
+    @ServiceMethod(targetPath = "/new_proposal_amend.html")
+    public void getDataForProposalAmend(Map<String, Object> params) {
+    }
+
+    @ServiceMethod(targetPath = "/new_proposal_repeal.html")
+    public void getDataForProposalRepeal(Map<String, Object> params) {
+    }
+
     public Boolean logout(HttpServletRequest request, HttpServletResponse response) {
         Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
         cookie.setMaxAge(0);

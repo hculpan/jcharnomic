@@ -278,9 +278,22 @@ public class CharnomicDAO {
         return rules;
     }
 
-/*    public List<Proposal> retrieveProposal() {
-        return retrieveProposal((String)null);
-    }*/
+    public Integer retrieveNextProposalNum() {
+        Integer result = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select max(num) maxnum from proposals");
+                if (set.next()) {
+                    result = set.getInt("maxnum") + 1;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
     public List<Proposal> retrieveProposal(String...status) {
         List<Proposal> proposals = new ArrayList<>();

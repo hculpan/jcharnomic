@@ -19,6 +19,27 @@ import java.util.UUID;
  * Created by harry on 3/31/17.
  */
 public class WebPostService extends BaseService {
+    @ServiceMethod( targetPath = "/new_proposal_start.html")
+    public Boolean newProposalStart(HttpServletRequest request, HttpServletResponse response) {
+        String proptype = request.getParameter("proptype");
+        try {
+            if (proptype.equals("new")) {
+                response.sendRedirect("/new_proposal_new.html");
+            } else if (proptype.equals("amend")) {
+                    response.sendRedirect("/new_proposal_amend.html");
+            } else if (proptype.equals("repeal")) {
+                response.sendRedirect("/new_proposal_repeal.html");
+            }
+        } catch (IOException e) {
+            sendMessage(response, request,
+                    "Unable to Continue",
+                    "We were unable to process this request.  Please contact the system administrator.",
+                    "/home.html",
+                    "Home");
+        }
+        return true;
+    }
+
     @ServiceMethod( targetPath = "/update_username.html")
     public Boolean updateUsername(HttpServletRequest request, HttpServletResponse response) {
         String email = request.getParameter("username");
