@@ -25,8 +25,8 @@
                         <ul class="contact-list">
                             <li>Proposed by: ${proposal.proposedBy.firstname} ${proposal.proposedBy.lastname} on
                                 ${proposal.proposedDate?string.medium}</li>
-                            <li>Voting opened: ${proposal.voteOpened?string.medium}</li>
-                            <li>Voting closed: ${proposal.voteClosed?string.medium}</li>
+                            <li>Voting opened: ${(proposal.voteOpened?string.medium)!}</li>
+                            <li>Voting closed: ${(proposal.voteClosed?string.medium)!}</li>
                             <li>Status: ${proposal.status}</li>
                         </ul>
                     </div>
