@@ -6,7 +6,7 @@ drop procedure if exists insert_rule;
 
 create procedure insert_rule()
 begin
-  declare propNum int default 22;
+  declare propNum int default 23;
 
   insert into rules (name, num, rule, proposalid)
   values ((select name from proposals where num = propNum),
