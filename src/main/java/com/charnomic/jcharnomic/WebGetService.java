@@ -68,6 +68,12 @@ public class WebGetService extends BaseService {
         params.put("movingplayer", getCharnomicDAO().getActivePlayer());
     }
 
+    @ServiceMethod(targetPath = "/next_player.html")
+    public void getDataForNextPlayer(Map<String, Object> params) {
+        Player player = getCharnomicDAO().activateNextPlayer();
+        params.put("movingplayer", player);
+    }
+
     @ServiceMethod(targetPath = "/add_points.html")
     public void getDataForAddPoints(Map<String, Object> params) {
         List<Player> players = getCharnomicDAO().retrievePlayers();

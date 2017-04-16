@@ -62,6 +62,61 @@ public class CharnomicDAO {
         return passwordEncryptor.checkPassword(password, getStoredPassword(email));
     }
 
+    protected Player findFirstActivePlayer(List<Player> players) {
+        return findFirstActivePlayer(players, null);
+    }
+
+    protected Player findFirstActivePlayer(List<Player> players, Player startWith) {
+        Player result = null;
+
+        Player startingPlayer = (startWith == null ? players.get(0) : null);
+        for (Player player : players) {
+            if (startingPlayer != null && !player.getOnLeave()) {
+                result = player;
+                setActivePlayer(player);
+                break;
+            }
+
+            if (startingPlayer == null && startWith.getId() == player.getId()) {
+                startingPlayer = player;
+            }
+        }
+
+        return result;
+    }
+
+    public void incrementeGameTurn() {
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                String sql = "update game_state " +
+                        "set turn = turn + 1 ";
+                if (statement.executeUpdate(sql) != 1) {
+                    throw new SQLException("Unable to update game turn");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Player activateNextPlayer() {
+        Player result = null;
+
+        List<Player> players = retrievePlayers();
+        Player activePlayer = getActivePlayer();
+        activePlayer.setTurn(false);
+        updatePlayerData(activePlayer, Player.updateablefields.turn);
+
+        result = findFirstActivePlayer(players, activePlayer);
+        if (result == null) {
+            incrementeGameTurn();
+            result = findFirstActivePlayer(players);
+        }
+        setActivePlayer(result);
+
+        return result;
+    }
+
     public Integer getTurnNum() {
         Integer result = null;
 
