@@ -45,7 +45,7 @@ public class BaseService {
         return result;
     }
 
-    public void addUserToParams(HttpServletRequest request, Map<String, Object> params) {
+    public Player addUserToParams(HttpServletRequest request, Map<String, Object> params) {
         Player player = getUserFromCookies(request);
         if (player != null) {
             params.put("activeplayer", player);
@@ -54,6 +54,8 @@ public class BaseService {
         Integer turn = getCharnomicDAO().getTurnNum();
         params.put("gameturn", turn);
         params.put("daycycle", ( turn % 2 == 0 ? "Night" : "Day"));
+
+        return player;
     }
 
     protected void sendMessage(HttpServletResponse response, HttpServletRequest request,

@@ -57,30 +57,30 @@ public class WebGetService extends BaseService {
     public void getDataForUpdatePassword(Map<String, Object> params) {
     }
 
-    @ServiceMethod(targetPath = "/update_username.html")
+    @ServiceMethod(targetPath = "/update_username.html", playerOnly = true)
     public void getDataForUpdateUsername(Map<String, Object> params) {
     }
 
-    @ServiceMethod(targetPath = "/active_player.html")
+    @ServiceMethod(targetPath = "/active_player.html", gameMonitorOnly = true)
     public void getDataForActivePlayer(Map<String, Object> params) {
         List<Player> players = getCharnomicDAO().retrievePlayers();
         params.put("players", players);
         params.put("movingplayer", getCharnomicDAO().getActivePlayer());
     }
 
-    @ServiceMethod(targetPath = "/next_player.html")
+    @ServiceMethod(targetPath = "/next_player.html", gameMonitorOnly = true)
     public void getDataForNextPlayer(Map<String, Object> params) {
         Player player = getCharnomicDAO().activateNextPlayer();
         params.put("movingplayer", player);
     }
 
-    @ServiceMethod(targetPath = "/add_points.html")
+    @ServiceMethod(targetPath = "/add_points.html", gameMonitorOnly = true)
     public void getDataForAddPoints(Map<String, Object> params) {
         List<Player> players = getCharnomicDAO().retrievePlayers();
         params.put("players", players);
     }
 
-    @ServiceMethod(targetPath = "/new_monitor_proposal.html")
+    @ServiceMethod(targetPath = "/new_monitor_proposal.html", gameMonitorOnly = true)
     public void getDataForNewMonitorProposal(Map<String, Object> params) {
         Integer nextNum = getCharnomicDAO().retrieveNextProposalNum();
         if (nextNum != null) {
@@ -90,11 +90,11 @@ public class WebGetService extends BaseService {
         params.put("players", players);
     }
 
-    @ServiceMethod(targetPath = "/new_proposal_start.html")
+    @ServiceMethod(targetPath = "/new_proposal_start.html", playerOnly = true)
     public void getDataForNewProposal(Map<String, Object> params) {
     }
 
-    @ServiceMethod(targetPath = "/new_proposal_new.html")
+    @ServiceMethod(targetPath = "/new_proposal_new.html", playerOnly = true)
     public void getDataForProposalNew(Map<String, Object> params) {
         Integer nextNum = getCharnomicDAO().retrieveNextProposalNum();
         if (nextNum != null) {
@@ -102,11 +102,11 @@ public class WebGetService extends BaseService {
         }
     }
 
-    @ServiceMethod(targetPath = "/new_proposal_amend.html")
+    @ServiceMethod(targetPath = "/new_proposal_amend.html", playerOnly = true)
     public void getDataForProposalAmend(Map<String, Object> params) {
     }
 
-    @ServiceMethod(targetPath = "/new_proposal_repeal.html")
+    @ServiceMethod(targetPath = "/new_proposal_repeal.html", playerOnly = true)
     public void getDataForProposalRepeal(Map<String, Object> params) {
     }
 
@@ -132,7 +132,14 @@ public class WebGetService extends BaseService {
 
             if (serviceMethod != null && !serviceMethod.targetPath().isEmpty() && serviceMethod.targetPath().equals(target)) {
                 result = new HashMap<>();
-                addUserToParams(request, result);
+                Player activePlayer = addUserToParams(request, result);
+
+                if (serviceMethod.playerOnly() && activePlayer == null) {
+                    throw new UnauthorizedException("Not logged in as player");
+                } else if (serviceMethod.gameMonitorOnly() && (activePlayer == null || !activePlayer.getMonitor())) {
+                    throw new UnauthorizedException("You do not have valid permissions to access this page");
+                }
+
                 method.invoke(this, result);
                 break;
             }

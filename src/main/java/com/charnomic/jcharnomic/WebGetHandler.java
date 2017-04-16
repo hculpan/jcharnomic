@@ -83,6 +83,14 @@ public class WebGetHandler extends AbstractHandler {
                 } catch (TemplateException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                     handleError(e, response);
+                } catch (UnauthorizedException e) {
+                    try {
+                        sendMessage(response, "Authorization Error", e.getLocalizedMessage(), "/home.html", "Home");
+                    } catch (TemplateException ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        baseRequest.setHandled(true);
+                    }
                 }
             }
         }

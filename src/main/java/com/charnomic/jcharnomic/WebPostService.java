@@ -163,6 +163,10 @@ public class WebPostService extends BaseService {
 
             try {
                 if (player.getPasswordExpired()) {
+                    Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
+                    cookie.setMaxAge(Integer.MAX_VALUE);
+                    getCharnomicDAO().updatePlayerUuid(player, cookie.getValue(), request.getHeader("User-Agent"));
+                    response.addCookie(cookie);
                     response.sendRedirect("/update_password.html");
                 } else {
                     newLoginForPlayer(request, response, player);

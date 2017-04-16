@@ -14,4 +14,8 @@ public @interface ServiceMethod {
 
     public String targetPath();
 
+    public boolean playerOnly() default false;
+
+    public boolean gameMonitorOnly() default false;
+
 }
