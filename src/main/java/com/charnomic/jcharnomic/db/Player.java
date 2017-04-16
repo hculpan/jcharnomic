@@ -36,8 +36,6 @@ public class Player {
 
     Boolean monitor;
 
-    String uuid;
-
     String email;
 
     public Integer getId() {
@@ -150,14 +148,6 @@ public class Player {
 
     public void setPasswordExpired(Boolean passwordExpired) {
         this.passwordExpired = passwordExpired;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getEmail() {

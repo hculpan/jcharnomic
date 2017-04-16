@@ -1,10 +1,10 @@
 package com.charnomic.jcharnomic;
 
 import com.charnomic.jcharnomic.annotation.ServiceMethod;
-import com.charnomic.jcharnomic.db.*;
-import com.fasterxml.jackson.databind.ser.Serializers;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
+import com.charnomic.jcharnomic.db.Judgment;
+import com.charnomic.jcharnomic.db.Player;
+import com.charnomic.jcharnomic.db.Proposal;
+import com.charnomic.jcharnomic.db.Rule;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +70,16 @@ public class WebGetService extends BaseService {
 
     @ServiceMethod(targetPath = "/add_points.html")
     public void getDataForAddPoints(Map<String, Object> params) {
+        List<Player> players = getCharnomicDAO().retrievePlayers();
+        params.put("players", players);
+    }
+
+    @ServiceMethod(targetPath = "/new_monitor_proposal.html")
+    public void getDataForNewMonitorProposal(Map<String, Object> params) {
+        Integer nextNum = getCharnomicDAO().retrieveNextProposalNum();
+        if (nextNum != null) {
+            params.put("proposalnum", nextNum);
+        }
         List<Player> players = getCharnomicDAO().retrievePlayers();
         params.put("players", players);
     }

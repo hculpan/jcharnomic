@@ -19,6 +19,33 @@ import java.util.UUID;
  * Created by harry on 3/31/17.
  */
 public class WebPostService extends BaseService {
+    @ServiceMethod( targetPath = "/new_monitor_proposal.html")
+    public Boolean newMonitorProposal(HttpServletRequest request, HttpServletResponse response) {
+        int propNum = Integer.parseInt(request.getParameter("propnum"));
+        String name = request.getParameter("propname");
+        String text = request.getParameter("proptext");
+        int playerId = Integer.parseInt(request.getParameter("propplayerid"));
+
+        Player p = getCharnomicDAO().getPlayerById(playerId);
+        if (text == null || text.isEmpty()) {
+            sendMessage(response, request,
+                    "Illegal Proposal",
+                    "Text cannot be blank",
+                    "/new_monitor_proposal.html",
+                    "New Proposal");
+            return true;
+        }
+
+        getCharnomicDAO().createProposal(propNum, name, text, p);
+        sendMessage(response, request,
+                "Proposal Added",
+                "The proposal has been added",
+                "/home.html",
+                "Home");
+
+        return true;
+    }
+
     @ServiceMethod( targetPath = "/new_proposal_start.html")
     public Boolean newProposalStart(HttpServletRequest request, HttpServletResponse response) {
         String proptype = request.getParameter("proptype");
@@ -113,7 +140,7 @@ public class WebPostService extends BaseService {
             try {
                 getCharnomicDAO().updatePassword(email, p1);
                 Player player = getCharnomicDAO().getPlayerByEmail(email);
-                newLoginForPlayer(response, player);
+                newLoginForPlayer(request, response, player);
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
                 sendMessage(response, request,
@@ -138,7 +165,7 @@ public class WebPostService extends BaseService {
                 if (player.getPasswordExpired()) {
                     response.sendRedirect("/update_password.html");
                 } else {
-                    newLoginForPlayer(response, player);
+                    newLoginForPlayer(request, response, player);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -154,10 +181,10 @@ public class WebPostService extends BaseService {
         return true;
     }
 
-    protected void newLoginForPlayer(HttpServletResponse response, Player player) throws IOException {
+    protected void newLoginForPlayer(HttpServletRequest request, HttpServletResponse response, Player player) throws IOException {
         Cookie cookie = new Cookie("uuid", UUID.randomUUID().toString());
         cookie.setMaxAge(Integer.MAX_VALUE);
-        getCharnomicDAO().updatePlayerUuid(player, cookie.getValue());
+        getCharnomicDAO().updatePlayerUuid(player, cookie.getValue(), request.getHeader("User-Agent"));
         response.addCookie(cookie);
         response.sendRedirect("/home");
     }

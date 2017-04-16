@@ -6,54 +6,43 @@ drop procedure if exists update_db;
 
 create procedure update_db()
 begin
-    alter table players add email varchar(100);
 
-    alter table players modify password varchar(65);
+    drop table if exists sessions;
 
-    alter table players add uuid char(36);
+    alter table players drop uuid;
 
-    update players
-        set email='harry@culpan.org',
-            password='Fd0YPm9DpymTbMRbn9gRs6mN+lFd4pHGZhSlxPV2ViH7ABokg5ptbQoDDUse8Byk',
-            passwordexpired=0
-        where lastname = 'Culpan';
+    create table game_state (
+        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        turn int default 1,
+        day boolean DEFAULT 1
+    );
 
-    update players
-        set email='wboivin@gmail.com',
-        password='5my/nNfyiPXPskXq23UzFyaqZxdcUnxDf7w7/HpeGdE5581sMs5cuSImgvqrF+HM',
-        passwordexpired=1
-        where lastname = 'Boivin';
+    insert into game_state (turn, day)
+        values (5, 1);
 
-    update players
-        set email='duignan_chris@yahoo.com',
-        password='uP3alt0wrAu9G+iDOrEE6a4RZvol8ZVskmkdjrfWe/h4DUlaWvDrxFOwIDQ+tARb',
-        passwordexpired=1
-        where lastname = 'Duignan';
+    create table sessions (
+        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        playerid INT,
+        uuid char(36),
+        info char(255),
+        login_datetime datetime default now(),
 
-    update players
-        set email='stvkoehler@gmail.com',
-        password='DONwtcUmHD5SXaBqXyaD6a1l/mUAtrI2ug7NG4FIP8/tHNkKnSEPpgA6XfpEKNpN',
-        passwordexpired=1
-        where lastname = 'Koehler';
+        FOREIGN KEY (playerid)
+        REFERENCES players(id)
+            ON DELETE CASCADE
 
-    update players
-        set email='amele@carolina.rr.com',
-        password='p9XGXVV+Q1RCYFEgwQ27TfwKzyBq2GLbsGVFxAYFZLldVXASMCU18uQcNMxHe3xY',
-        passwordexpired=1
-        where lastname = 'Mele';
+    );
 
-    update players
-        set email='michael.thomason68@gmail.com',
-        password='AKySfl9HAhjbum8oVVSiNS1GHkdD+xSJuHSaEjnqEe226m8UoH308DKxngOzy6O5',
-        passwordexpired=1
-        where lastname = 'Thomason';
+    create unique index sessions_idx1 on sessions(uuid);
 
-    update players
-        set email='paul@tesseract.org',
-        password='1ql3E2JqsChy33qvxo5L4Uvi2qsF6wBlTrdfky4ggsy3ERsVkKxkR6ZNm1Gt8xvK',
-        passwordexpired=1
-        where lastname = 'Wiegand';
-
+    insert into sessions (playerid, uuid, login_datetime)
+        values (
+            (
+                select id, uuid, now()
+                from players
+                where uuid is not null
+            )
+        );
 end $$
 
 delimiter ;

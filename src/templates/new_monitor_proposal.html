@@ -9,7 +9,7 @@
     <br><br><br>
     <div id="leftcol"><h4>New proposal:</h4></div>
     <div id="middlecol">
-        <form id="new_proposal_form" action="/new_proposal_new.html" method="post">
+        <form id="new_proposal_form" action="/new_monitor_proposal.html" method="post">
             <table>
                 <tr>
                     <td class="text-right">Proposal Number:</td>
@@ -26,10 +26,21 @@
                     <td colspan="2"><textarea class="form-control" rows="15" cols="40" name="proptext"></textarea></td>
                 </tr>
                 <tr>
+                    <td align="right">Proposing player:</td>
+                    <td><select name="propplayerid">
+                        <#list players as player>
+                            <option value="${player.id}">${player.firstname} ${player.lastname}</option>
+                        </#list>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="3" class="text-center"><br><#if message??>${message}<#else></#if></td>
                 </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" value="Insert"></td>
+                </tr>
             </table>
-            <a class="w3-right w3-btn" href="javascript:{}" onclick="new_proposal_form.submit();">Next &#10095;</a>
         </form>
         <br><br><br>
     </div>

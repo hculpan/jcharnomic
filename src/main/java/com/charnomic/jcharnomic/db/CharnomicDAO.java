@@ -62,6 +62,23 @@ public class CharnomicDAO {
         return passwordEncryptor.checkPassword(password, getStoredPassword(email));
     }
 
+    public Integer getTurnNum() {
+        Integer result = null;
+
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                ResultSet set = statement.executeQuery("select turn from game_state");
+                if (set.next()) {
+                    result = set.getInt("turn");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public Player getPlayerById(Integer id) {
         Player player = null;
 
@@ -77,6 +94,26 @@ public class CharnomicDAO {
         }
 
         return player;
+    }
+
+    public void createProposal(Integer num, String name, String text, Player player) {
+        try (Connection conn = cpds.getConnection()) {
+            try (Statement statement = conn.createStatement()) {
+                String sql = "insert into proposals " +
+                        " (num, name, proposal, proposedby, proposeddate, status) " +
+                        " values (" + num.toString() + ", " +
+                        "         " + (name == null || name.isEmpty() ? null : "'" + name + "', ") +
+                        "         '" + text + "', " +
+                        "         " + Integer.toString(player.getId()) + ", " +
+                        "         now(), " +
+                        "         'proposed')";
+                if (statement.executeUpdate(sql) != 1) {
+                    throw new SQLException("Unable to insert proposal");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Player getPlayerByEmail(String email) {
@@ -128,13 +165,13 @@ public class CharnomicDAO {
         }
     }
 
-    public void updatePlayerUuid(Player player, String uuid) {
-        player.setUuid(uuid);
-
+    public void updatePlayerUuid(Player player, String uuid, String userInfo) {
         try (Connection conn = cpds.getConnection()) {
             try (Statement statement = conn.createStatement()) {
-                if (statement.executeUpdate("update players set uuid='" + uuid + "' where id=" + player.getId().toString()) != 1) {
-                    throw new SQLException("Unable to update uuid");
+                if (statement.executeUpdate("insert into sessions " +
+                        "(uuid, playerid, info) " +
+                        "values('" + uuid + "', " + player.getId().toString() + ", '" + userInfo + "')") != 1) {
+                    throw new SQLException("Unable to insert uuid");
                 }
             }
         } catch (SQLException e) {
@@ -205,7 +242,12 @@ public class CharnomicDAO {
 
         try (Connection conn = cpds.getConnection()) {
             try (Statement statement = conn.createStatement()) {
-                ResultSet set = statement.executeQuery("select * from players where uuid = '" + uuid + "'");
+                String sql =
+                        "select p.*, s.uuid " +
+                        "from players p " +
+                        "inner join sessions s on s.playerid = p.id " +
+                        "where s.uuid = '"+ uuid + "'";
+                ResultSet set = statement.executeQuery(sql);
                 if (set.next()) {
                     player = createPlayer(set);
                 }
@@ -233,7 +275,6 @@ public class CharnomicDAO {
         player.setVetoes(set.getInt("vetoes"));
         player.setTotalVetoes(set.getInt("totalvetoes"));
         player.setPasswordExpired(set.getBoolean("passwordexpired"));
-        player.setUuid(set.getString("uuid"));
         player.setEmail(set.getString("email"));
 
         return player;

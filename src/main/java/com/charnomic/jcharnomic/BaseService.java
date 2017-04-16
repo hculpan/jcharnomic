@@ -50,6 +50,10 @@ public class BaseService {
         if (player != null) {
             params.put("activeplayer", player);
         }
+
+        Integer turn = getCharnomicDAO().getTurnNum();
+        params.put("gameturn", turn);
+        params.put("daycycle", ( turn % 2 == 0 ? "Night" : "Day"));
     }
 
     protected void sendMessage(HttpServletResponse response, HttpServletRequest request,
