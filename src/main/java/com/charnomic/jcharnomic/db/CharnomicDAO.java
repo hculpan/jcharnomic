@@ -71,7 +71,7 @@ public class CharnomicDAO {
 
         Player startingPlayer = (startWith == null ? players.get(0) : null);
         for (Player player : players) {
-            if (startingPlayer != null && !player.getOnLeave()) {
+            if (startingPlayer != null && !player.getOnLeave() && player.getActive()) {
                 result = player;
                 setActivePlayer(player);
                 break;
@@ -151,14 +151,24 @@ public class CharnomicDAO {
         return player;
     }
 
+    protected String formatText(String text) {
+        String result = text.replace("'", "''");
+        result = result.replace("<", "#lt;");
+        result = result.replace(">", "#gt;");
+        result = result.replace("#p ", "<p>");
+        result = result.replace("/p", "</p>");
+
+        return result;
+    }
+
     public void createProposal(Integer num, String name, String text, Player player) {
         try (Connection conn = cpds.getConnection()) {
             try (Statement statement = conn.createStatement()) {
                 String sql = "insert into proposals " +
                         " (num, name, proposal, proposedby, proposeddate, status) " +
                         " values (" + num.toString() + ", " +
-                        "         " + (name == null || name.isEmpty() ? null : "'" + name + "', ") +
-                        "         '" + text + "', " +
+                        "         " + (name == null || name.isEmpty() ? "null," : "'" + formatText(name) + "', ") +
+                        "         '" + formatText(text) + "', " +
                         "         " + Integer.toString(player.getId()) + ", " +
                         "         now(), " +
                         "         'proposed')";
@@ -324,6 +334,7 @@ public class CharnomicDAO {
         player.setGold(set.getInt("gold"));
         player.setTurn(set.getBoolean("turn"));
         player.setOnLeave(set.getBoolean("onleave"));
+        player.setActive(set.getBoolean("active"));
         player.setJoined(set.getDate("joined"));
         player.setLeftGame(set.getDate("leftgame"));
         player.setMonitor(set.getBoolean("monitor"));
@@ -340,7 +351,7 @@ public class CharnomicDAO {
 
         try (Connection conn = cpds.getConnection()) {
             try (Statement statement = conn.createStatement()) {
-                ResultSet set = statement.executeQuery("select * from players");
+                ResultSet set = statement.executeQuery("select * from players where active = 1");
                 while (set.next()) {
                     players.add(createPlayer(set));
                 }

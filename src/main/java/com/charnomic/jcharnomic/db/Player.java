@@ -20,6 +20,8 @@ public class Player {
 
     Boolean onLeave;
 
+    Boolean active;
+
     Integer points;
 
     Integer level;
@@ -156,5 +158,13 @@ public class Player {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

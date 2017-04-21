@@ -23,11 +23,7 @@
                 <div class="footer-col-wrapper status-${proposal.status}">
                     <div class="footer-col footer-col-1">
                         <ul class="contact-list">
-                            <li>Proposed by: ${proposal.proposedBy.firstname} ${proposal.proposedBy.lastname} on
-                                ${proposal.proposedDate?string.medium}</li>
-                            <li>Voting opened: ${(proposal.voteOpened?string.medium)!}</li>
-                            <li>Voting closed: ${(proposal.voteClosed?string.medium)!}</li>
-                            <li>Status: ${proposal.status}</li>
+                            <li>Proposed by: ${proposal.proposedBy.firstname} ${proposal.proposedBy.lastname}</li>
                         </ul>
                     </div>
 
@@ -36,10 +32,7 @@
 
                     <div class="footer-col footer-col-3">
                         <ul class="contact-list">
-                            <li>Votes in favor: ${proposal.votesInFavor}</li>
-                            <li>Votes against: ${proposal.votesAgainst}</li>
-                            <li>Abstained: ${proposal.votesAbstained}</li>
-                            <li>Vetoes: ${proposal.votesVeto}</li>
+                            <li>Status: ${proposal.status}</li>
                         </ul>
                     </div>
                 </div>
